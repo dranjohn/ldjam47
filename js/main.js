@@ -14,10 +14,12 @@ function update(now) {
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
 	ctx.clearRect(0, 0, width, height);
 
-	ctx.translate(384, -128);
-	ctx.rotate(Math.PI * now / 1000.0);
+	ctx.scale(width / 12, height / 4);
 
-	ctx.drawImage(backgroundImage, -384, -384, 768, 768);
+	ctx.translate(6, -2);
+	ctx.rotate(0.2 * Math.PI * now / 1000.0);
+
+	ctx.drawImage(backgroundImage, -6, -6, 12, 12);
 
 	requestAnimationFrame(update);
 }
