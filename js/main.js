@@ -25,10 +25,7 @@ function update(now) {
 	ctx.scale(width / 12, height / 4);
 
 	// Draw background
-	gameState.renderWorld();
-
-	// Draw player
-	gameState.renderPlayer();
+	gameState.render();
 
 
 	// Request the next animation frame in the loop
@@ -47,6 +44,11 @@ function main() {
 	width = canvas.width;
 	height = canvas.height;
 	ctx.imageSmoothingEnabled = false;
+
+	/* Adjustments for text rendering */
+	ctx.font = "0.8px monospace";
+	ctx.textBaseline = "top";
+	ctx.fillStyle = "white";
 
 	// Load initial game state
 	gameState = new GameState(ctx);

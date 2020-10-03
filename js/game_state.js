@@ -4,6 +4,15 @@ function playerMoveFunction(deltaTime) {
   // Check if the player wants to talk to a guardian
   if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
     console.log("guardian talk " + this._worldRotation);
+		this._isTalking = true;
+		this._playerIsWalking = false;
+		this._talkingTimeElapsed = 0;
+		this._talkingLines = this._splitText("Hello darkness my old friend, long time no see, and let's just add another line here lolol");
+		this._talkingOptions = [this._splitText("okeydokey"), this._splitText("let me think about it and maybe consult my lawyer"), this._splitText("muy bueno")];
+		this._selectedOption = 0;
+		this._finishedTalking = false;
+		this._update = talkingUpdate;
+		return;
   }
 
   // Player movement
@@ -75,6 +84,26 @@ function worldRotateFunction(deltaTime) {
   }
 }
 
+function talkingUpdate(deltaTime) {
+	this._talkingTimeElapsed += deltaTime;
+
+	if (this._finishedTalking) {
+		if (this._keyboard.keys.ArrowDown.pressed) {
+			this._selectedOption++;
+		}
+		if (this._keyboard.keys.ArrowUp.pressed) {
+			this._selectedOption--;
+		}
+		this._selectedOption += this._talkingOptions.length;
+		this._selectedOption %= this._talkingOptions.length;
+
+		if (this._keyboard.keys.x.pressed) {
+			this._isTalking = false;
+			this._update = playerMoveFunction;
+		}
+	}
+}
+
 class GameState {
   constructor(ctx) {
     // Store the canvas context
@@ -108,6 +137,13 @@ class GameState {
     this._playerWalkingCycle = 0;
     this._playerIsWalking = false;
 
+		this._isTalking = false;
+		this._talkingTimeElapsed = 0;
+		this._talkingLines = "";
+		this._finishedTalking = false;
+		this._talkingOptions = [];
+		this._selectedOption = 0;
+
     // Load the world
     this._worldRotation = 0;
     this._targetWorldRotation = 0;
@@ -115,7 +151,7 @@ class GameState {
     this._worldSprite = new SrcImage("images/world.png");
 
   	// Create keyboard listener
-  	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight"]);
+  	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
     this._update = playerMoveFunction;
   }
 
@@ -134,8 +170,17 @@ class GameState {
     this._update(deltaTime);
   }
 
+	render() {
+		if (!this._isTalking) {
+			this._renderWorld();
+		} else {
+			this._renderText();
+		}
+		this._renderPlayer();
+	}
 
-  renderWorld() {
+
+  _renderWorld() {
     // Save foreground coordinates
 	  ctx.save();
 
@@ -150,7 +195,7 @@ class GameState {
   	ctx.restore();
   }
 
-  renderPlayer() {
+  _renderPlayer() {
     if (this._targetWorldRotation == this._worldRotation) {
       var currentPlayerSprite = this._playerSprites.idle;
       if (this._playerIsWalking) {
@@ -166,4 +211,63 @@ class GameState {
       this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.turning), this._playerX - 6, 4, 1, 1);
     }
   }
+
+	_renderText() {
+		this._ctx.save();
+		// We need to zoom out because we cannot use a font smaller than 1px.
+		// Each third of the visible frame now measures 16 by 16 virtual pixels.
+		this._ctx.scale(0.25, 0.25);
+
+		const talkingSpeed = 20;
+		let lettersToTypeNumber = Math.floor(this._talkingTimeElapsed * talkingSpeed);
+
+		for (let i = 0; i < this._talkingLines.length; i++) {
+			this._ctx.fillText(this._talkingLines[i].substring(0, lettersToTypeNumber), 1, i+1);
+			lettersToTypeNumber -= this._talkingLines[i].length;
+		}
+
+		if (lettersToTypeNumber > 0) {
+			let lineNumber = 1;
+
+			for (let i = 0; i < this._talkingOptions.length; i++) {
+				if (i !== this._selectedOption) {
+					this._ctx.fillStyle = "gray";
+				}
+				for (let line of this._talkingOptions[i]) {
+					this._ctx.fillText(line.substring(0, lettersToTypeNumber), 33, lineNumber);
+					lettersToTypeNumber -= line.length;
+					lineNumber++;
+				}
+				this._ctx.fillStyle = "white";
+				lineNumber++;
+			}
+
+			this._finishedTalking = (lettersToTypeNumber >= 0);
+		}
+
+		this._ctx.restore();
+	}
+
+	_splitText(message) {
+		let words = message.split(" ");
+		let lines = [];
+		let currentLine = [];
+
+		this._ctx.save();
+		this._ctx.scale(0.25, 0.25);
+
+		for (let word of words) {
+			if (this._ctx.measureText(currentLine.concat([word])).width > 14) {
+				lines.push(currentLine.join(" "));
+				currentLine = [word];
+			} else {
+				currentLine.push(word);
+			}
+		}
+		lines.push(currentLine.join(" "));
+
+		this._ctx.restore();
+
+		return lines;
+	}
 }
