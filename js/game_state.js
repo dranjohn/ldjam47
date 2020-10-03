@@ -3,15 +3,17 @@
 function playerMoveFunction(deltaTime) {
   // Check if the player wants to talk to a guardian
   if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
-    console.log("guardian talk " + this._worldRotation);
-		this._isTalking = true;
 		this._playerIsWalking = false;
+
+		this._isTalking = true;
 		this._talkingTimeElapsed = 0;
 		this._talkingLines = this._splitText("Hello darkness my old friend, long time no see, and let's just add another line here lolol");
 		this._talkingOptions = [this._splitText("okeydokey"), this._splitText("let me think about it and maybe consult my lawyer"), this._splitText("muy bueno")];
 		this._selectedOption = 0;
 		this._finishedTalking = false;
+
 		this._update = talkingUpdate;
+
 		return;
   }
 
@@ -148,7 +150,7 @@ class GameState {
     this._worldRotation = 0;
     this._targetWorldRotation = 0;
 
-    this._worldSprite = new SrcImage("images/world.png");
+    this._worldSprite = new SrcImage("images/world/world.png");
 
   	// Create keyboard listener
   	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
@@ -188,8 +190,8 @@ class GameState {
 	  ctx.translate(6, -2);
 	  ctx.rotate(this._worldRotation * Math.PI / 2);
 
-    // Render all 9 parts of the world (TODO: from one sprite to nine)
-    this._ctx.drawImage(this._worldSprite, -6, -6, 12, 12);
+    // Render all 9 parts of the world
+		this._ctx.drawImage(this._worldSprite, -6, -6, 12, 12);
 
     // Restore foreground coordinates
   	ctx.restore();
