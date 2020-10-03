@@ -106,6 +106,22 @@ function talkingUpdate(deltaTime) {
 	}
 }
 
+
+class Guardian {
+	constructor(spriteLeft, spriteRight) {
+		this._sprites = {
+			left: spriteLeft,
+			right: spriteRight
+		};
+
+		this._facingRight = false;
+	}
+
+	getSprite() {
+		return this._sprites[this._facingRight ? "right" : "left"];
+	}
+}
+
 class GameState {
   constructor(ctx) {
     // Store the canvas context
@@ -151,6 +167,12 @@ class GameState {
     this._targetWorldRotation = 0;
 
     this._worldSprite = new SrcImage("images/world/world.png");
+		this._guardians = [
+			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png"), 0),
+			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png"), 1),
+			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png"), 2),
+			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"), 3)
+		];
 
   	// Create keyboard listener
   	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
@@ -178,6 +200,7 @@ class GameState {
 		} else {
 			this._renderText();
 		}
+		this._renderGuardians();
 		this._renderPlayer();
 	}
 
@@ -190,7 +213,7 @@ class GameState {
 	  ctx.translate(6, -2);
 	  ctx.rotate(this._worldRotation * Math.PI / 2);
 
-    // Render all 9 parts of the world
+    // Render the world
 		this._ctx.drawImage(this._worldSprite, -6, -6, 12, 12);
 
     // Restore foreground coordinates
@@ -206,11 +229,15 @@ class GameState {
 
       this._ctx.drawImage(this.getPlayerSprite(currentPlayerSprite), this._playerX, 2, 1, 1);
     } else {
+			this._ctx.save();
+
       // Translate to background coordinates
   	  ctx.translate(6, -2);
   	  ctx.rotate((this._worldRotation - this._targetWorldRotation - Math.sign(this._worldRotation - this._targetWorldRotation)) * Math.PI / 2);
 
       this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.turning), this._playerX - 6, 4, 1, 1);
+
+			this._ctx.restore();
     }
   }
 
@@ -249,6 +276,25 @@ class GameState {
 
 		this._ctx.restore();
 	}
+
+	_renderGuardians() {
+		// Save foreground coordinates
+	  ctx.save();
+
+  	// Translate to background coordinates
+	  ctx.translate(6, -2);
+	  ctx.rotate(this._worldRotation * Math.PI / 2);
+
+    // Render the guardians
+		for (var i = 0; i < 4; ++i) {
+			this._ctx.drawImage(this._guardians[i].getSprite(), 0, 3, 1, 2);
+			ctx.rotate(-Math.PI / 2);
+		}
+
+    // Restore foreground coordinates
+  	ctx.restore();
+	}
+
 
 	_splitText(message) {
 		let words = message.split(" ");
