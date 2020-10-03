@@ -3,17 +3,7 @@
 function playerMoveFunction(deltaTime) {
   // Check if the player wants to talk to a guardian
   if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
-		this._playerIsWalking = false;
-
-		this._isTalking = true;
-		this._talkingTimeElapsed = 0;
-		this._talkingLines = this._splitText("Hello darkness my old friend, long time no see, and let's just add another line here lolol");
-		this._talkingOptions = [this._splitText("okeydokey"), this._splitText("let me think about it and maybe consult my lawyer"), this._splitText("muy bueno")];
-		this._selectedOption = 0;
-		this._finishedTalking = false;
-
-		this._update = talkingUpdate;
-
+		this._startTalking("This is the Question", ["Answer A", "Answer B", "Answer C"]);
 		return;
   }
 
@@ -187,6 +177,20 @@ class GameState {
       return baseSprite.left;
     }
   }
+
+	_startTalking(message, options) {
+		this._playerIsWalking = false;
+		this._isTalking = true;
+		this._talkingTimeElapsed = 0;
+		this._talkingLines = this._splitText(message);
+		this._talkingOptions = [];
+		for (let option of options) {
+			this._talkingOptions.push(this._splitText(option));
+		}
+		this._selectedOption = 0;
+		this._finishedTalking = false;
+		this._update = talkingUpdate;
+	}
 
 
   update(deltaTime) {
