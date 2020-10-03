@@ -36,9 +36,18 @@ class GameState {
 		this._isTalking = false;
 		this._talkingTimeElapsed = 0;
 		this._talkingMessage = [];
-		this._finishedTalking = false;
+		this._isTyping = false;
 		this._talkingOptions = [];
 		this._selectedOption = 0;
+
+		this._typeoutSounds = [
+			new VolumeAudio("sound/typeout_spring.wav", 0.25),
+			new VolumeAudio("sound/typeout_summer.wav", 0.25),
+			new VolumeAudio("sound/typeout_autumn.wav", 0.25),
+			new VolumeAudio("sound/typeout_winter.wav", 0.25)
+		];
+		this._selectSound = new VolumeAudio("sound/select.wav", 0.25);
+		this._actionSound = new VolumeAudio("sound/action.wav", 0.25);
 
 		// Load the world
 		this._isTurning = false;
@@ -88,7 +97,7 @@ class GameState {
 			this._talkingOptions.push(this._splitText(option));
 		}
 		this._selectedOption = 0;
-		this._finishedTalking = false;
+		this._isTyping = true;
 	}
 
 
@@ -107,6 +116,7 @@ class GameState {
 	_updatePlayer (deltaTime) { //function playerMoveFunction(deltaTime) {
 		// Check if the player wants to talk to a guardian
 		if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
+			//this._actionSound.play();
 			this._startTalking("This is the Question", ["Answer A", "Answer B", "Answer C"]);
 			return;
 		}
@@ -183,18 +193,21 @@ class GameState {
 	_updateDialog(deltaTime) { // function talkingUpdate(deltaTime) {
 		this._talkingTimeElapsed += deltaTime;
 
-		if (this._finishedTalking) {
+		if (!this._isTyping) {
 			if (this._keyboard.keys.ArrowDown.pressed) {
 				this._selectedOption++;
+				this._selectSound.play();
 			}
 			if (this._keyboard.keys.ArrowUp.pressed) {
 				this._selectedOption--;
+				this._selectSound.play();
 			}
 			this._selectedOption += this._talkingOptions.length;
 			this._selectedOption %= this._talkingOptions.length;
 
 			if (this._keyboard.keys.x.pressed) {
 				this._isTalking = false;
+				this._actionSound.play();
 			}
 		}
 	}
@@ -252,8 +265,12 @@ class GameState {
 		// Each third of the visible frame now measures 16 by 16 virtual pixels.
 		this._ctx.scale(0.25, 0.25);
 
-		const talkingSpeed = 20;
-		let lettersLeft = Math.floor(this._talkingTimeElapsed * talkingSpeed);
+		if (this._isTyping) {
+			this._typeoutSounds[this._worldRotation].play();
+			//this._selectSound.play();
+		}
+
+		let lettersLeft = Math.floor(this._talkingTimeElapsed * 20);
 
 		for (let i = 0; i < this._talkingMessage.length; i++) {
 			this._ctx.fillText(this._talkingMessage[i].substring(0, lettersLeft), 1, i+1);
@@ -276,7 +293,7 @@ class GameState {
 				lineNumber++;
 			}
 
-			this._finishedTalking = (lettersLeft >= 0);
+			this._isTyping = (lettersLeft < 0);
 		}
 
 		this._ctx.restore();
