@@ -5,6 +5,7 @@ function playerMoveFunction(deltaTime) {
   if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
     console.log("guardian talk " + this._worldRotation);
 		this._isTalking = true;
+		this._playerIsWalking = false;
 		this._talkingTimeElapsed = 0;
 		this._update = talkingUpdate;
 		return;
@@ -150,11 +151,17 @@ class GameState {
     this._update(deltaTime);
   }
 
-
-  renderWorld() {
-		if (this._isTalking) {
-			return;
+	render() {
+		if (!this._isTalking) {
+			this._renderWorld();
+		} else {
+			this._renderText();
 		}
+		this._renderPlayer();
+	}
+
+
+  _renderWorld() {
     // Save foreground coordinates
 	  ctx.save();
 
@@ -169,7 +176,7 @@ class GameState {
   	ctx.restore();
   }
 
-  renderPlayer() {
+  _renderPlayer() {
     if (this._targetWorldRotation == this._worldRotation) {
       var currentPlayerSprite = this._playerSprites.idle;
       if (this._playerIsWalking) {
@@ -185,4 +192,8 @@ class GameState {
       this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.turning), this._playerX - 6, 4, 1, 1);
     }
   }
+
+	_renderText() {
+		// pass
+	}
 }

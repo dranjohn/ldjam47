@@ -25,10 +25,7 @@ function update(now) {
 	ctx.scale(width / 12, height / 4);
 
 	// Draw background
-	gameState.renderWorld();
-
-	// Draw player
-	gameState.renderPlayer();
+	gameState.render();
 
 
 	// Request the next animation frame in the loop
