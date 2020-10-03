@@ -29,8 +29,11 @@ class GameState {
 
       var dr = Math.sign(this._targetWorldRotation - this._worldRotation);
 
-      if (Math.abs(this._targetWorldRotation - this._worldRotation) < Math.abs(rotationSpeed * dr * deltaTime)) {
+      if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
+        // Rotation has completed
         this._worldRotation = this._targetWorldRotation;
+
+        this._playerX = (this._playerX > 5.5) ? 1 : 10;
       } else {
         this._worldRotation += rotationSpeed * dr * deltaTime;
       }
@@ -82,6 +85,16 @@ class GameState {
   }
 
   renderPlayer() {
-    this._ctx.drawImage(this._playerImage, this._playerX, 2, 1, 1);
+    if (this._targetWorldRotation == this._worldRotation) {
+      this._ctx.drawImage(this._playerImage, this._playerX, 2, 1, 1);
+    } else {
+      //render in background coordinate system
+
+      // Translate to background coordinates
+  	  ctx.translate(6, -2);
+  	  ctx.rotate((this._worldRotation - this._targetWorldRotation - Math.sign(this._worldRotation - this._targetWorldRotation)) * Math.PI / 2);
+
+      this._ctx.drawImage(this._playerImage, this._playerX - 6, 2 + 2, 1, 1);
+    }
   }
 }
