@@ -15,9 +15,23 @@ class GameState {
       turning: {
         left: new SrcImage("images/player/turning_left.png"),
         right: new SrcImage("images/player/turning_right.png")
-      }
+      },
+
+      walking: [
+        {
+          left: new SrcImage("images/player/walking_left_1.png"),
+          right: new SrcImage("images/player/walking_right_1.png")
+        },
+        {
+          left: new SrcImage("images/player/walking_left_2.png"),
+          right: new SrcImage("images/player/walking_right_2.png")
+        }
+      ]
     };
     this._playerFacingRight = true;
+
+    this._playerWalkingCycle = 0;
+    this._playerIsWalking = false;
 
     // Load the world
     this._worldRotation = 0;
@@ -69,6 +83,11 @@ class GameState {
       }
 
       if (dx != 0) {
+        this._playerWalkingCycle += deltaTime * playerSpeed * 0.8;
+        this._playerWalkingCycle %= 2;
+
+        this._playerIsWalking = true;
+
         this._playerX += playerSpeed * dx * deltaTime;
         this._playerFacingRight = dx > 0;
 
@@ -84,6 +103,9 @@ class GameState {
           // Trigger world right rotate
           this._targetWorldRotation += 1;
         }
+      } else {
+        this._playerWalkingCycle = 0;
+        this._playerIsWalking = false;
       }
     }
   }
@@ -106,7 +128,12 @@ class GameState {
 
   renderPlayer() {
     if (this._targetWorldRotation == this._worldRotation) {
-      this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.idle), this._playerX, 2, 1, 1);
+      var currentPlayerSprite = this._playerSprites.idle;
+      if (this._playerIsWalking) {
+        currentPlayerSprite = this._playerSprites.walking[Math.floor(this._playerWalkingCycle)];
+      }
+
+      this._ctx.drawImage(this.getPlayerSprite(currentPlayerSprite), this._playerX, 2, 1, 1);
     } else {
       // Translate to background coordinates
   	  ctx.translate(6, -2);
