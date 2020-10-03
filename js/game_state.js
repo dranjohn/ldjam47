@@ -114,11 +114,11 @@ class Guardian {
 			right: spriteRight
 		};
 
-		this._facingRight = false;
+		//this._facingRight = false;
 	}
 
-	getSprite() {
-		return this._sprites[this._facingRight ? "right" : "left"];
+	getSprite(facingRight) {
+		return this._sprites[facingRight ? "right" : "left"];
 	}
 }
 
@@ -168,10 +168,10 @@ class GameState {
 
     this._worldSprite = new SrcImage("images/world/world.png");
 		this._guardians = [
-			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png"), 0),
-			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png"), 1),
-			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png"), 2),
-			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"), 3)
+			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png")),
+			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png")),
+			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png")),
+			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"))
 		];
 
   	// Create keyboard listener
@@ -287,7 +287,11 @@ class GameState {
 
     // Render the guardians
 		for (var i = 0; i < 4; ++i) {
-			this._ctx.drawImage(this._guardians[i].getSprite(), 0, 3, 1, 2);
+			let facingRight = this._playerX > 6;
+			let isRotating = this._worldRotation !== this._targetWorldRotation;
+			let isApproaching = i === ((this._targetWorldRotation + 4) % 4);
+			facingRight ^= isRotating && isApproaching;
+			this._ctx.drawImage(this._guardians[i].getSprite(facingRight), 0, 3, 1, 2);
 			ctx.rotate(-Math.PI / 2);
 		}
 
