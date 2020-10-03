@@ -3,7 +3,6 @@
 // Canvas data and input handling (do not modify!)
 var canvas, ctx;
 var width, height;
-var keyboard;
 
 // Game state
 var currentTime = 0;
@@ -15,7 +14,6 @@ var gameState;
  */
 function update(now) {
 	// Update game state
-	keyboard.update();
 	gameState.update(now - currentTime);
 	currentTime = now;
 

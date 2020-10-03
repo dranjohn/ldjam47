@@ -19,7 +19,7 @@ class GameState {
 
 
   update(deltaTime) {
-
+	   this._keyboard.update();
   }
 
 
