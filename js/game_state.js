@@ -96,22 +96,6 @@ function talkingUpdate(deltaTime) {
 	}
 }
 
-
-class Guardian {
-	constructor(spriteLeft, spriteRight) {
-		this._sprites = {
-			left: spriteLeft,
-			right: spriteRight
-		};
-
-		//this._facingRight = false;
-	}
-
-	getSprite(facingRight) {
-		return this._sprites[facingRight ? "right" : "left"];
-	}
-}
-
 class GameState {
   constructor(ctx) {
     // Store the canvas context
@@ -157,11 +141,23 @@ class GameState {
     this._targetWorldRotation = 0;
 
     this._worldSprite = new SrcImage("images/world/world.png");
-		this._guardians = [
-			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png")),
-			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png")),
-			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png")),
-			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"))
+		this._guardianSprites = [
+			{
+				left: new SrcImage("images/guardian/spring_left.png"),
+				right: new SrcImage("images/guardian/spring_right.png")
+			},
+			{
+				left: new SrcImage("images/guardian/summer_left.png"),
+				right: new SrcImage("images/guardian/summer_right.png")
+			},
+			{
+				left: new SrcImage("images/guardian/autumn_left.png"),
+				right: new SrcImage("images/guardian/autumn_right.png")
+			},
+			{
+				left: new SrcImage("images/guardian/winter_left.png"),
+				right: new SrcImage("images/guardian/winter_right.png")
+			}
 		];
 
   	// Create keyboard listener
@@ -252,14 +248,14 @@ class GameState {
 		this._ctx.scale(0.25, 0.25);
 
 		const talkingSpeed = 20;
-		let lettersToTypeNumber = Math.floor(this._talkingTimeElapsed * talkingSpeed);
+		let lettersLeft = Math.floor(this._talkingTimeElapsed * talkingSpeed);
 
 		for (let i = 0; i < this._talkingLines.length; i++) {
-			this._ctx.fillText(this._talkingLines[i].substring(0, lettersToTypeNumber), 1, i+1);
-			lettersToTypeNumber -= this._talkingLines[i].length;
+			this._ctx.fillText(this._talkingLines[i].substring(0, lettersLeft), 1, i+1);
+			lettersLeft -= this._talkingLines[i].length;
 		}
 
-		if (lettersToTypeNumber > 0) {
+		if (lettersLeft > 0) {
 			let lineNumber = 1;
 
 			for (let i = 0; i < this._talkingOptions.length; i++) {
@@ -267,15 +263,15 @@ class GameState {
 					this._ctx.fillStyle = "gray";
 				}
 				for (let line of this._talkingOptions[i]) {
-					this._ctx.fillText(line.substring(0, lettersToTypeNumber), 33, lineNumber);
-					lettersToTypeNumber -= line.length;
+					this._ctx.fillText(line.substring(0, lettersLeft), 33, lineNumber);
+					lettersLeft -= line.length;
 					lineNumber++;
 				}
 				this._ctx.fillStyle = "white";
 				lineNumber++;
 			}
 
-			this._finishedTalking = (lettersToTypeNumber >= 0);
+			this._finishedTalking = (lettersLeft >= 0);
 		}
 
 		this._ctx.restore();
@@ -295,7 +291,7 @@ class GameState {
 			let isRotating = this._worldRotation !== this._targetWorldRotation;
 			let isApproaching = i === ((this._targetWorldRotation + 4) % 4);
 			facingRight ^= isRotating && isApproaching;
-			this._ctx.drawImage(this._guardians[i].getSprite(facingRight), 0, 3, 1, 2);
+			this._ctx.drawImage(this._guardianSprites[i][facingRight ? "right" : "left"], 0, 3, 1, 2);
 			ctx.rotate(-Math.PI / 2);
 		}
 
