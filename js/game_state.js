@@ -11,6 +11,8 @@ class GameState {
 
     // Load the world
     this._worldRotation = 0;
+    this._targetWorldRotation = 0;
+
     this._worldSprite = new SrcImage("images/test_picture.png");
 
   	// Create keyboard listener
@@ -19,28 +21,46 @@ class GameState {
 
 
   update(deltaTime) {
-    const playerSpeed = 7;
+    this._keyboard.update();
 
-	  this._keyboard.update();
+    if (this._worldRotation != this._targetWorldRotation) {
+      // World rotation
+      const rotationSpeed = 1;
 
-    var dx = 0;
-    if (this._keyboard.keys.ArrowLeft.down) {
-      dx -= 1;
-    }
-    if (this._keyboard.keys.ArrowRight.down) {
-      dx += 1;
-    }
+      var dr = Math.sign(this._targetWorldRotation - this._worldRotation);
 
-    if (dx != 0) {
-      this._playerX += playerSpeed * dx * deltaTime;
-
-      if (this._playerX <= 1) {
-        this._playerX = 1;
-        //trigger left rotate
+      if (Math.abs(this._targetWorldRotation - this._worldRotation) < Math.abs(rotationSpeed * dr * deltaTime)) {
+        this._worldRotation = this._targetWorldRotation;
+      } else {
+        this._worldRotation += rotationSpeed * dr * deltaTime;
       }
-      if (this._playerX >= 10) {
-        this._playerX = 10;
-        //trigger right rotate
+    } else {
+      // Player movement
+      const playerSpeed = 7;
+
+      var dx = 0;
+      if (this._keyboard.keys.ArrowLeft.down) {
+        dx -= 1;
+      }
+      if (this._keyboard.keys.ArrowRight.down) {
+        dx += 1;
+      }
+
+      if (dx != 0) {
+        this._playerX += playerSpeed * dx * deltaTime;
+
+        if (this._playerX <= 1) {
+          this._playerX = 1;
+
+          // Trigger world left rotate
+          this._targetWorldRotation -= 1;
+        }
+        if (this._playerX >= 10) {
+          this._playerX = 10;
+
+          // Trigger world right rotate
+          this._targetWorldRotation += 1;
+        }
       }
     }
   }
@@ -52,7 +72,7 @@ class GameState {
 
   	// Translate to background coordinates
 	  ctx.translate(6, -2);
-	  ctx.rotate(this._worldRotation);
+	  ctx.rotate(this._worldRotation * Math.PI / 2);
 
     // Render all 9 parts of the world (TODO: from one sprite to nine)
     this._ctx.drawImage(this._worldSprite, -6, -6, 12, 12);
