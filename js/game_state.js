@@ -1,37 +1,37 @@
 'use strict';
 
 class GameState {
-  constructor(ctx) {
-    // Store the canvas context
-    this._ctx = ctx;
+	constructor(ctx) {
+		// Store the canvas context
+		this._ctx = ctx;
 
-    // Create the player
-    this._playerX = 4;
-    this._playerSprites = {
-      idle: {
-        left: new SrcImage("images/player/idle_left.png"),
-        right: new SrcImage("images/player/idle_right.png")
-      },
-      turning: {
-        left: new SrcImage("images/player/turning_left.png"),
-        right: new SrcImage("images/player/turning_right.png")
-      },
+		// Create the player
+		this._playerX = 4;
+		this._playerSprites = {
+			idle: {
+				left: new SrcImage("images/player/idle_left.png"),
+				right: new SrcImage("images/player/idle_right.png")
+			},
+			turning: {
+				left: new SrcImage("images/player/turning_left.png"),
+				right: new SrcImage("images/player/turning_right.png")
+			},
 
-      walking: [
-        {
-          left: new SrcImage("images/player/walking_left_1.png"),
-          right: new SrcImage("images/player/walking_right_1.png")
-        },
-        {
-          left: new SrcImage("images/player/walking_left_2.png"),
-          right: new SrcImage("images/player/walking_right_2.png")
-        }
-      ]
-    };
-    this._playerFacingRight = true;
+			walking: [
+				{
+					left: new SrcImage("images/player/walking_left_1.png"),
+					right: new SrcImage("images/player/walking_right_1.png")
+				},
+				{
+					left: new SrcImage("images/player/walking_left_2.png"),
+					right: new SrcImage("images/player/walking_right_2.png")
+				}
+			]
+		};
+		this._playerFacingRight = true;
 
-    this._playerWalkingCycle = 0;
-    this._playerIsWalking = false;
+		this._playerWalkingCycle = 0;
+		this._playerIsWalking = false;
 
 		this._isTalking = false;
 		this._talkingTimeElapsed = 0;
@@ -40,12 +40,12 @@ class GameState {
 		this._talkingOptions = [];
 		this._selectedOption = 0;
 
-    // Load the world
+		// Load the world
 		this._isTurning = false;
-    this._worldRotation = 0;
-    this._targetWorldRotation = 0;
+		this._worldRotation = 0;
+		this._targetWorldRotation = 0;
 
-    this._worldSprite = new SrcImage("images/world/world.png");
+		this._worldSprite = new SrcImage("images/world/world.png");
 		this._guardianSprites = [
 			{
 				left: new SrcImage("images/guardian/spring_left.png"),
@@ -65,18 +65,18 @@ class GameState {
 			}
 		];
 
-  	// Create keyboard listener
-  	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
-  }
+		// Create keyboard listener
+		this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
+	}
 
 
-  getPlayerSprite(baseSprite) {
-    if (this._playerFacingRight) {
-      return baseSprite.right;
-    } else {
-      return baseSprite.left;
-    }
-  }
+	getPlayerSprite(baseSprite) {
+		if (this._playerFacingRight) {
+			return baseSprite.right;
+		} else {
+			return baseSprite.left;
+		}
+	}
 
 	_startTalking(message, options) {
 		this._playerIsWalking = false;
@@ -92,8 +92,8 @@ class GameState {
 	}
 
 
-  update(deltaTime) {
-    this._keyboard.update();
+	update(deltaTime) {
+		this._keyboard.update();
 
 		if (this._isTurning) {
 			this._updateRotation(deltaTime);
@@ -102,82 +102,82 @@ class GameState {
 		} else {
 			this._updatePlayer(deltaTime);
 		}
-  }
+	}
 
 	_updatePlayer (deltaTime) { //function playerMoveFunction(deltaTime) {
-	  // Check if the player wants to talk to a guardian
-	  if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
+		// Check if the player wants to talk to a guardian
+		if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
 			this._startTalking("This is the Question", ["Answer A", "Answer B", "Answer C"]);
 			return;
-	  }
+		}
 	
-	  // Player movement
-	  const playerSpeed = 7;
+		// Player movement
+		const playerSpeed = 7;
 	
-	  // Calculate player speed
-	  var dx = 0;
-	  if (this._keyboard.keys.ArrowLeft.down) {
-	    dx -= 1;
-	  }
-	  if (this._keyboard.keys.ArrowRight.down) {
-	    dx += 1;
-	  }
+		// Calculate player speed
+		var dx = 0;
+		if (this._keyboard.keys.ArrowLeft.down) {
+			dx -= 1;
+		}
+		if (this._keyboard.keys.ArrowRight.down) {
+			dx += 1;
+		}
 	
-	  // Only execute this if the player is actually moving
-	  if (dx != 0) {
-	    // Update the player walk cycle animation
-	    this._playerWalkingCycle += deltaTime * playerSpeed * 0.8;
-	    this._playerWalkingCycle %= 2;
+		// Only execute this if the player is actually moving
+		if (dx != 0) {
+			// Update the player walk cycle animation
+			this._playerWalkingCycle += deltaTime * playerSpeed * 0.8;
+			this._playerWalkingCycle %= 2;
 	
-	    this._playerIsWalking = true;
+			this._playerIsWalking = true;
 	
-	    // Update the player position
-	    this._playerX += playerSpeed * dx * deltaTime;
-	    this._playerFacingRight = dx > 0;
+			// Update the player position
+			this._playerX += playerSpeed * dx * deltaTime;
+			this._playerFacingRight = dx > 0;
 	
-	    // Trigger world rotation if necessary
-	    if (this._playerX <= 1) {
-	      this._playerX = 1;
+			// Trigger world rotation if necessary
+			if (this._playerX <= 1) {
+				this._playerX = 1;
 	
-	      // Trigger world left rotate
-	      this._targetWorldRotation -= 1;
-	      this._isTurning = true;
-	    }
-	    if (this._playerX >= 10) {
-	      this._playerX = 10;
+				// Trigger world left rotate
+				this._targetWorldRotation -= 1;
+				this._isTurning = true;
+			}
+			if (this._playerX >= 10) {
+				this._playerX = 10;
 	
-	      // Trigger world right rotate
-	      this._targetWorldRotation += 1;
-	      this._isTurning = true;
-	    }
-	  } else {
-	    // If the player is not moving, reset the walking animation
-	    this._playerWalkingCycle = 0;
-	    this._playerIsWalking = false;
-	  }
+				// Trigger world right rotate
+				this._targetWorldRotation += 1;
+				this._isTurning = true;
+			}
+		} else {
+			// If the player is not moving, reset the walking animation
+			this._playerWalkingCycle = 0;
+			this._playerIsWalking = false;
+		}
 	}
 
 	_updateRotation (deltaTime) { // function worldRotateFunction(deltaTime) {
-	  // World rotation
-	  const rotationSpeed = 1;
+		// World rotation
+		const rotationSpeed = 1;
 
-	  var dr = Math.sign(this._targetWorldRotation - this._worldRotation);
+		var dr = Math.sign(this._targetWorldRotation - this._worldRotation);
 
-	  if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
-	    // Rotation has completed
-	    this._worldRotation = this._targetWorldRotation;
+		if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
+			// Rotation has completed
+			this._worldRotation = this._targetWorldRotation;
 	
-	    // Update player
-	    this._playerX = (this._playerX > 5.5) ? 1 : 10;
-	    this._isTurning = false;
+			// Update player
+			this._playerX = (this._playerX > 5.5) ? 1 : 10;
+			this._isTurning = false;
 	
-	    // Set the world rotation into the [0, 3] range
-	    this._worldRotation += 4;
-	    this._worldRotation %= 4;
-	    this._targetWorldRotation = this._worldRotation;
-	  } else {
-	    this._worldRotation += rotationSpeed * dr * deltaTime;
-	  }
+			// Set the world rotation into the [0, 3] range
+			this._worldRotation += 4;
+			this._worldRotation %= 4;
+			this._targetWorldRotation = this._worldRotation;
+		} else {
+			this._worldRotation += rotationSpeed * dr * deltaTime;
+		}
 	}
 
 	_updateDialog(deltaTime) { // function talkingUpdate(deltaTime) {
@@ -210,41 +210,41 @@ class GameState {
 	}
 
 
-  _renderWorld() {
-    // Save foreground coordinates
-	  ctx.save();
+	_renderWorld() {
+		// Save foreground coordinates
+		ctx.save();
 
-  	// Translate to background coordinates
-	  ctx.translate(6, -2);
-	  ctx.rotate(this._worldRotation * Math.PI / 2);
+		// Translate to background coordinates
+		ctx.translate(6, -2);
+		ctx.rotate(this._worldRotation * Math.PI / 2);
 
-    // Render the world
+		// Render the world
 		this._ctx.drawImage(this._worldSprite, -6, -6, 12, 12);
 
-    // Restore foreground coordinates
-  	ctx.restore();
-  }
+		// Restore foreground coordinates
+		ctx.restore();
+	}
 
-  _renderPlayer() {
-    if (this._targetWorldRotation == this._worldRotation) {
-      var currentPlayerSprite = this._playerSprites.idle;
-      if (this._playerIsWalking) {
-        currentPlayerSprite = this._playerSprites.walking[Math.floor(this._playerWalkingCycle)];
-      }
+	_renderPlayer() {
+		if (this._targetWorldRotation == this._worldRotation) {
+			var currentPlayerSprite = this._playerSprites.idle;
+			if (this._playerIsWalking) {
+				currentPlayerSprite = this._playerSprites.walking[Math.floor(this._playerWalkingCycle)];
+			}
 
-      this._ctx.drawImage(this.getPlayerSprite(currentPlayerSprite), this._playerX, 2, 1, 1);
-    } else {
+			this._ctx.drawImage(this.getPlayerSprite(currentPlayerSprite), this._playerX, 2, 1, 1);
+		} else {
 			this._ctx.save();
 
-      // Translate to background coordinates
-  	  ctx.translate(6, -2);
-  	  ctx.rotate((this._worldRotation - this._targetWorldRotation - Math.sign(this._worldRotation - this._targetWorldRotation)) * Math.PI / 2);
+			// Translate to background coordinates
+			ctx.translate(6, -2);
+			ctx.rotate((this._worldRotation - this._targetWorldRotation - Math.sign(this._worldRotation - this._targetWorldRotation)) * Math.PI / 2);
 
-      this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.turning), this._playerX - 6, 4, 1, 1);
+			this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.turning), this._playerX - 6, 4, 1, 1);
 
 			this._ctx.restore();
-    }
-  }
+		}
+	}
 
 	_renderText() {
 		this._ctx.save();
@@ -284,13 +284,13 @@ class GameState {
 
 	_renderGuardians() {
 		// Save foreground coordinates
-	  ctx.save();
+		ctx.save();
 
-  	// Translate to background coordinates
-	  ctx.translate(6, -2);
-	  ctx.rotate(this._worldRotation * Math.PI / 2);
+		// Translate to background coordinates
+		ctx.translate(6, -2);
+		ctx.rotate(this._worldRotation * Math.PI / 2);
 
-    // Render the guardians
+		// Render the guardians
 		for (var i = 0; i < 4; ++i) {
 			let facingRight = this._playerX > 6;
 			let isRotating = this._worldRotation !== this._targetWorldRotation;
@@ -300,8 +300,8 @@ class GameState {
 			ctx.rotate(-Math.PI / 2);
 		}
 
-    // Restore foreground coordinates
-  	ctx.restore();
+		// Restore foreground coordinates
+		ctx.restore();
 	}
 
 
