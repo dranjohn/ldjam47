@@ -4,6 +4,10 @@ function playerMoveFunction(deltaTime) {
   // Check if the player wants to talk to a guardian
   if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
     console.log("guardian talk " + this._worldRotation);
+		this._isTalking = true;
+		this._talkingTimeElapsed = 0;
+		this._update = talkingUpdate;
+		return;
   }
 
   // Player movement
@@ -75,6 +79,15 @@ function worldRotateFunction(deltaTime) {
   }
 }
 
+function talkingUpdate(deltaTime) {
+	this._talkingTimeElapsed += deltaTime;
+
+	if (this._talkingTimeElapsed >= 2) {
+		this._isTalking = false;
+		this._update = playerMoveFunction;
+	}
+}
+
 class GameState {
   constructor(ctx) {
     // Store the canvas context
@@ -108,6 +121,9 @@ class GameState {
     this._playerWalkingCycle = 0;
     this._playerIsWalking = false;
 
+		this._isTalking = false;
+		this._talkingTimeElapsed = 0;
+
     // Load the world
     this._worldRotation = 0;
     this._targetWorldRotation = 0;
@@ -136,6 +152,9 @@ class GameState {
 
 
   renderWorld() {
+		if (this._isTalking) {
+			return;
+		}
     // Save foreground coordinates
 	  ctx.save();
 
