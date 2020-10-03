@@ -7,9 +7,8 @@ function playerMoveFunction(deltaTime) {
 		this._isTalking = true;
 		this._playerIsWalking = false;
 		this._talkingTimeElapsed = 0;
-		this._talkingLines = this._splitText("Hello darkness my old friend, long time no see");
-		console.log(this._talkingLines);
-		this._talkingOptions = [];
+		this._talkingLines = this._splitText("Hello darkness my old friend, long time no see, and let's just add another line here lolol");
+		this._talkingOptions = [this._splitText("okeydokey"), this._splitText("let me think about it and maybe consult my lawyer"), this._splitText("muy bueno")];
 		this._finishedTalking = false;
 		this._update = talkingUpdate;
 		return;
@@ -207,21 +206,26 @@ class GameState {
 		this._ctx.scale(0.25, 0.25);
 
 		const talkingSpeed = 20;
-		let typedLettersNumber = Math.floor(this._talkingTimeElapsed * talkingSpeed);
-		let lineNumber = 1;
+		let lettersToTypeNumber = Math.floor(this._talkingTimeElapsed * talkingSpeed);
 
-		for (let line of this._talkingLines) {
-			console.log(line);
-			this._ctx.fillText(line.substring(0, typedLettersNumber), 1, lineNumber);
-			typedLettersNumber -= line.length;
-			// The following line is technically unnecessary as string.substring()
-			// returns an empty string for limits <= 0
-			if (typedLettersNumber <= 0) break;
-			lineNumber++;
+		for (let i = 0; i < this._talkingLines.length; i++) {
+			this._ctx.fillText(this._talkingLines[i].substring(0, lettersToTypeNumber), 1, i+1);
+			lettersToTypeNumber -= this._talkingLines[i].length;
 		}
 
-		if (lineNumber > this._talkingLines.length) {
-			this._finishedTalking = true;
+		if (lettersToTypeNumber > 0) {
+			let lineNumber = 1;
+
+			for (let i = 0; i < this._talkingOptions.length; i++) {
+				for (let line of this._talkingOptions[i]) {
+					this._ctx.fillText(line.substring(0, lettersToTypeNumber), 33, lineNumber);
+					lettersToTypeNumber -= line.length;
+					lineNumber++;
+				}
+				lineNumber++;
+			}
+
+			this._finishedTalking = (lettersToTypeNumber >= 0);
 		}
 
 		this._ctx.restore();
