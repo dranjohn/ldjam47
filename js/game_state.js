@@ -19,7 +19,30 @@ class GameState {
 
 
   update(deltaTime) {
-	   this._keyboard.update();
+    const playerSpeed = 7;
+
+	  this._keyboard.update();
+
+    var dx = 0;
+    if (this._keyboard.keys.ArrowLeft.down) {
+      dx -= 1;
+    }
+    if (this._keyboard.keys.ArrowRight.down) {
+      dx += 1;
+    }
+
+    if (dx != 0) {
+      this._playerX += playerSpeed * dx * deltaTime;
+
+      if (this._playerX <= 1) {
+        this._playerX = 1;
+        //trigger left rotate
+      }
+      if (this._playerX >= 10) {
+        this._playerX = 10;
+        //trigger right rotate
+      }
+    }
   }
 
 

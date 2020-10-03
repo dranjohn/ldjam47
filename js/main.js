@@ -14,7 +14,7 @@ var gameState;
  */
 function update(now) {
 	// Update game state
-	gameState.update(now - currentTime);
+	gameState.update((now - currentTime) / 1000.0);
 	currentTime = now;
 
 	// Reset canvas
