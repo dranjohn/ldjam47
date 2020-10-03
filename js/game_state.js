@@ -7,6 +7,10 @@ function playerMoveFunction(deltaTime) {
 		this._isTalking = true;
 		this._playerIsWalking = false;
 		this._talkingTimeElapsed = 0;
+		this._talkingLines = this._splitText("Hello darkness my old friend, long time no see");
+		console.log(this._talkingLines);
+		this._talkingOptions = [];
+		this._finishedTalking = false;
 		this._update = talkingUpdate;
 		return;
   }
@@ -83,7 +87,7 @@ function worldRotateFunction(deltaTime) {
 function talkingUpdate(deltaTime) {
 	this._talkingTimeElapsed += deltaTime;
 
-	if (this._talkingTimeElapsed >= 2) {
+	if (this._finishedTalking && this._keyboard.keys.x.pressed) {
 		this._isTalking = false;
 		this._update = playerMoveFunction;
 	}
@@ -124,6 +128,9 @@ class GameState {
 
 		this._isTalking = false;
 		this._talkingTimeElapsed = 0;
+		this._talkingLines = "";
+		this._finishedTalking = false;
+		this._talkingOptions = [];
 
     // Load the world
     this._worldRotation = 0;
@@ -194,6 +201,52 @@ class GameState {
   }
 
 	_renderText() {
-		// pass
+		this._ctx.save();
+		// We need to zoom out because we cannot use a font smaller than 1px.
+		// The left third of the world now measures 16 by 16 virtual pixels.
+		this._ctx.scale(0.25, 0.25);
+
+		const talkingSpeed = 20;
+		let typedLettersNumber = Math.floor(this._talkingTimeElapsed * talkingSpeed);
+		let lineNumber = 1;
+
+		for (let line of this._talkingLines) {
+			console.log(line);
+			this._ctx.fillText(line.substring(0, typedLettersNumber), 1, lineNumber);
+			typedLettersNumber -= line.length;
+			// The following line is technically unnecessary as string.substring()
+			// returns an empty string for limits <= 0
+			if (typedLettersNumber <= 0) break;
+			lineNumber++;
+		}
+
+		if (lineNumber > this._talkingLines.length) {
+			this._finishedTalking = true;
+		}
+
+		this._ctx.restore();
+	}
+
+	_splitText(message) {
+		let words = message.split(" ");
+		let lines = [];
+		let currentLine = [];
+
+		this._ctx.save();
+		this._ctx.scale(0.25, 0.25);
+
+		for (let word of words) {
+			if (this._ctx.measureText(currentLine.concat([word])).width > 14) {
+				lines.push(currentLine.join(" "));
+				currentLine = [word];
+			} else {
+				currentLine.push(word);
+			}
+		}
+		lines.push(currentLine.join(" "));
+
+		this._ctx.restore();
+
+		return lines;
 	}
 }

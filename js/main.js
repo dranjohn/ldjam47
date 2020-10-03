@@ -45,6 +45,11 @@ function main() {
 	height = canvas.height;
 	ctx.imageSmoothingEnabled = false;
 
+	/* Adjustments for text rendering */
+	ctx.font = "0.8px monospace";
+	ctx.textBaseline = "top";
+	ctx.fillStyle = "white";
+
 	// Load initial game state
 	gameState = new GameState(ctx);
 
