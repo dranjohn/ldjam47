@@ -31,11 +31,11 @@ class GameState {
 		this._playerFacingRight = true;
 
 		this._playerWalkingCycle = 0;
-		this._playerIsWalking = false;
+		this._isWalking = false;
 
 		this._isTalking = false;
 		this._talkingTimeElapsed = 0;
-		this._talkingLines = "";
+		this._talkingMessage = [];
 		this._finishedTalking = false;
 		this._talkingOptions = [];
 		this._selectedOption = 0;
@@ -79,10 +79,10 @@ class GameState {
 	}
 
 	_startTalking(message, options) {
-		this._playerIsWalking = false;
+		this._isWalking = false;
 		this._isTalking = true;
 		this._talkingTimeElapsed = 0;
-		this._talkingLines = this._splitText(message);
+		this._talkingMessage = this._splitText(message);
 		this._talkingOptions = [];
 		for (let option of options) {
 			this._talkingOptions.push(this._splitText(option));
@@ -110,10 +110,10 @@ class GameState {
 			this._startTalking("This is the Question", ["Answer A", "Answer B", "Answer C"]);
 			return;
 		}
-	
+
 		// Player movement
 		const playerSpeed = 7;
-	
+
 		// Calculate player speed
 		var dx = 0;
 		if (this._keyboard.keys.ArrowLeft.down) {
@@ -122,30 +122,30 @@ class GameState {
 		if (this._keyboard.keys.ArrowRight.down) {
 			dx += 1;
 		}
-	
+
 		// Only execute this if the player is actually moving
 		if (dx !== 0) {
 			// Update the player walk cycle animation
 			this._playerWalkingCycle += deltaTime * playerSpeed * 0.8;
 			this._playerWalkingCycle %= 2;
-	
-			this._playerIsWalking = true;
-	
+
+			this._isWalking = true;
+
 			// Update the player position
 			this._playerX += playerSpeed * dx * deltaTime;
 			this._playerFacingRight = dx > 0;
-	
+
 			// Trigger world rotation if necessary
 			if (this._playerX <= 1) {
 				this._playerX = 1;
-	
+
 				// Trigger world left rotate
 				this._targetWorldRotation -= 1;
 				this._isTurning = true;
 			}
 			if (this._playerX >= 10) {
 				this._playerX = 10;
-	
+
 				// Trigger world right rotate
 				this._targetWorldRotation += 1;
 				this._isTurning = true;
@@ -153,7 +153,7 @@ class GameState {
 		} else {
 			// If the player is not moving, reset the walking animation
 			this._playerWalkingCycle = 0;
-			this._playerIsWalking = false;
+			this._isWalking = false;
 		}
 	}
 
@@ -166,11 +166,11 @@ class GameState {
 		if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
 			// Rotation has completed
 			this._worldRotation = this._targetWorldRotation;
-	
+
 			// Update player
 			this._playerX = (this._playerX > 5.5) ? 1 : 10;
 			this._isTurning = false;
-	
+
 			// Set the world rotation into the [0, 3] range
 			this._worldRotation += 4;
 			this._worldRotation %= 4;
@@ -182,7 +182,7 @@ class GameState {
 
 	_updateDialog(deltaTime) { // function talkingUpdate(deltaTime) {
 		this._talkingTimeElapsed += deltaTime;
-	
+
 		if (this._finishedTalking) {
 			if (this._keyboard.keys.ArrowDown.pressed) {
 				this._selectedOption++;
@@ -192,7 +192,7 @@ class GameState {
 			}
 			this._selectedOption += this._talkingOptions.length;
 			this._selectedOption %= this._talkingOptions.length;
-	
+
 			if (this._keyboard.keys.x.pressed) {
 				this._isTalking = false;
 			}
@@ -226,9 +226,9 @@ class GameState {
 	}
 
 	_renderPlayer() {
-		if (this._targetWorldRotation === this._worldRotation) {
+		if (!this._isTurning) {
 			var currentPlayerSprite = this._playerSprites.idle;
-			if (this._playerIsWalking) {
+			if (this._isWalking) {
 				currentPlayerSprite = this._playerSprites.walking[Math.floor(this._playerWalkingCycle)];
 			}
 
@@ -255,9 +255,9 @@ class GameState {
 		const talkingSpeed = 20;
 		let lettersLeft = Math.floor(this._talkingTimeElapsed * talkingSpeed);
 
-		for (let i = 0; i < this._talkingLines.length; i++) {
-			this._ctx.fillText(this._talkingLines[i].substring(0, lettersLeft), 1, i+1);
-			lettersLeft -= this._talkingLines[i].length;
+		for (let i = 0; i < this._talkingMessage.length; i++) {
+			this._ctx.fillText(this._talkingMessage[i].substring(0, lettersLeft), 1, i+1);
+			lettersLeft -= this._talkingMessage[i].length;
 		}
 
 		if (lettersLeft > 0) {
@@ -293,9 +293,8 @@ class GameState {
 		// Render the guardians
 		for (var i = 0; i < 4; ++i) {
 			let facingRight = this._playerX > 6;
-			let isRotating = this._worldRotation !== this._targetWorldRotation;
 			let isApproaching = i === ((this._targetWorldRotation + 4) % 4);
-			facingRight ^= isRotating && isApproaching;
+			facingRight ^= this._isTurning && isApproaching;
 			this._ctx.drawImage(this._guardianSprites[i][facingRight ? "right" : "left"], 0, 3, 1, 2);
 			ctx.rotate(-Math.PI / 2);
 		}
@@ -303,7 +302,6 @@ class GameState {
 		// Restore foreground coordinates
 		ctx.restore();
 	}
-
 
 	_splitText(message) {
 		let words = message.split(" ");
