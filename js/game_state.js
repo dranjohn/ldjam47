@@ -124,7 +124,7 @@ class GameState {
 		}
 	
 		// Only execute this if the player is actually moving
-		if (dx != 0) {
+		if (dx !== 0) {
 			// Update the player walk cycle animation
 			this._playerWalkingCycle += deltaTime * playerSpeed * 0.8;
 			this._playerWalkingCycle %= 2;
@@ -226,7 +226,7 @@ class GameState {
 	}
 
 	_renderPlayer() {
-		if (this._targetWorldRotation == this._worldRotation) {
+		if (this._targetWorldRotation === this._worldRotation) {
 			var currentPlayerSprite = this._playerSprites.idle;
 			if (this._playerIsWalking) {
 				currentPlayerSprite = this._playerSprites.walking[Math.floor(this._playerWalkingCycle)];
