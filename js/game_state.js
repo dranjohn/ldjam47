@@ -1,5 +1,80 @@
 'use strict';
 
+function playerMoveFunction(deltaTime) {
+  // Check if the player wants to talk to a guardian
+  if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
+    console.log("guardian talk " + this._worldRotation);
+  }
+
+  // Player movement
+  const playerSpeed = 7;
+
+  // Calculate player speed
+  var dx = 0;
+  if (this._keyboard.keys.ArrowLeft.down) {
+    dx -= 1;
+  }
+  if (this._keyboard.keys.ArrowRight.down) {
+    dx += 1;
+  }
+
+  // Only execute this if the player is actually moving
+  if (dx != 0) {
+    // Update the player walk cycle animation
+    this._playerWalkingCycle += deltaTime * playerSpeed * 0.8;
+    this._playerWalkingCycle %= 2;
+
+    this._playerIsWalking = true;
+
+    // Update the player position
+    this._playerX += playerSpeed * dx * deltaTime;
+    this._playerFacingRight = dx > 0;
+
+    // Trigger world rotation if necessary
+    if (this._playerX <= 1) {
+      this._playerX = 1;
+
+      // Trigger world left rotate
+      this._targetWorldRotation -= 1;
+      this._update = worldRotateFunction;
+    }
+    if (this._playerX >= 10) {
+      this._playerX = 10;
+
+      // Trigger world right rotate
+      this._targetWorldRotation += 1;
+      this._update = worldRotateFunction;
+    }
+  } else {
+    // If the player is not moving, reset the walking animation
+    this._playerWalkingCycle = 0;
+    this._playerIsWalking = false;
+  }
+}
+
+function worldRotateFunction(deltaTime) {
+  // World rotation
+  const rotationSpeed = 1;
+
+  var dr = Math.sign(this._targetWorldRotation - this._worldRotation);
+
+  if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
+    // Rotation has completed
+    this._worldRotation = this._targetWorldRotation;
+
+    // Update player
+    this._playerX = (this._playerX > 5.5) ? 1 : 10;
+    this._update = playerMoveFunction;
+
+    // Set the world rotation into the [0, 3] range
+    this._worldRotation += 4;
+    this._worldRotation %= 4;
+    this._targetWorldRotation = this._worldRotation;
+  } else {
+    this._worldRotation += rotationSpeed * dr * deltaTime;
+  }
+}
+
 class GameState {
   constructor(ctx) {
     // Store the canvas context
@@ -41,6 +116,7 @@ class GameState {
 
   	// Create keyboard listener
   	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight"]);
+    this._update = playerMoveFunction;
   }
 
 
@@ -55,63 +131,7 @@ class GameState {
 
   update(deltaTime) {
     this._keyboard.update();
-
-    if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
-      console.log("guardian talk");
-    }
-
-    if (this._worldRotation != this._targetWorldRotation) {
-      // World rotation
-      const rotationSpeed = 1;
-
-      var dr = Math.sign(this._targetWorldRotation - this._worldRotation);
-
-      if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
-        // Rotation has completed
-        this._worldRotation = this._targetWorldRotation;
-
-        this._playerX = (this._playerX > 5.5) ? 1 : 10;
-      } else {
-        this._worldRotation += rotationSpeed * dr * deltaTime;
-      }
-    } else {
-      // Player movement
-      const playerSpeed = 7;
-
-      var dx = 0;
-      if (this._keyboard.keys.ArrowLeft.down) {
-        dx -= 1;
-      }
-      if (this._keyboard.keys.ArrowRight.down) {
-        dx += 1;
-      }
-
-      if (dx != 0) {
-        this._playerWalkingCycle += deltaTime * playerSpeed * 0.8;
-        this._playerWalkingCycle %= 2;
-
-        this._playerIsWalking = true;
-
-        this._playerX += playerSpeed * dx * deltaTime;
-        this._playerFacingRight = dx > 0;
-
-        if (this._playerX <= 1) {
-          this._playerX = 1;
-
-          // Trigger world left rotate
-          this._targetWorldRotation -= 1;
-        }
-        if (this._playerX >= 10) {
-          this._playerX = 10;
-
-          // Trigger world right rotate
-          this._targetWorldRotation += 1;
-        }
-      } else {
-        this._playerWalkingCycle = 0;
-        this._playerIsWalking = false;
-      }
-    }
+    this._update(deltaTime);
   }
 
 
