@@ -7,6 +7,9 @@ class Keyboard {
 		for (let keyname of keynames) {
 			this._keys[keyname] = new Key();
 		}
+
+		addEventListener("keydown", e => this.keydown(e));
+		addEventListener("keyup", e => this.keyup(e));
 	}
 
 	get keys() {
