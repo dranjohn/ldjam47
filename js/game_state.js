@@ -9,6 +9,7 @@ function playerMoveFunction(deltaTime) {
 		this._talkingTimeElapsed = 0;
 		this._talkingLines = this._splitText("Hello darkness my old friend, long time no see, and let's just add another line here lolol");
 		this._talkingOptions = [this._splitText("okeydokey"), this._splitText("let me think about it and maybe consult my lawyer"), this._splitText("muy bueno")];
+		this._selectedOption = 0;
 		this._finishedTalking = false;
 		this._update = talkingUpdate;
 		return;
@@ -86,9 +87,20 @@ function worldRotateFunction(deltaTime) {
 function talkingUpdate(deltaTime) {
 	this._talkingTimeElapsed += deltaTime;
 
-	if (this._finishedTalking && this._keyboard.keys.x.pressed) {
-		this._isTalking = false;
-		this._update = playerMoveFunction;
+	if (this._finishedTalking) {
+		if (this._keyboard.keys.ArrowDown.pressed) {
+			this._selectedOption++;
+		}
+		if (this._keyboard.keys.ArrowUp.pressed) {
+			this._selectedOption--;
+		}
+		this._selectedOption += this._talkingOptions.length;
+		this._selectedOption %= this._talkingOptions.length;
+
+		if (this._keyboard.keys.x.pressed) {
+			this._isTalking = false;
+			this._update = playerMoveFunction;
+		}
 	}
 }
 
@@ -130,6 +142,7 @@ class GameState {
 		this._talkingLines = "";
 		this._finishedTalking = false;
 		this._talkingOptions = [];
+		this._selectedOption = 0;
 
     // Load the world
     this._worldRotation = 0;
@@ -138,7 +151,7 @@ class GameState {
     this._worldSprite = new SrcImage("images/world.png");
 
   	// Create keyboard listener
-  	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight"]);
+  	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
     this._update = playerMoveFunction;
   }
 
@@ -202,7 +215,7 @@ class GameState {
 	_renderText() {
 		this._ctx.save();
 		// We need to zoom out because we cannot use a font smaller than 1px.
-		// The left third of the world now measures 16 by 16 virtual pixels.
+		// Each third of the visible frame now measures 16 by 16 virtual pixels.
 		this._ctx.scale(0.25, 0.25);
 
 		const talkingSpeed = 20;
@@ -217,11 +230,15 @@ class GameState {
 			let lineNumber = 1;
 
 			for (let i = 0; i < this._talkingOptions.length; i++) {
+				if (i !== this._selectedOption) {
+					this._ctx.fillStyle = "gray";
+				}
 				for (let line of this._talkingOptions[i]) {
 					this._ctx.fillText(line.substring(0, lettersToTypeNumber), 33, lineNumber);
 					lettersToTypeNumber -= line.length;
 					lineNumber++;
 				}
+				this._ctx.fillStyle = "white";
 				lineNumber++;
 			}
 
