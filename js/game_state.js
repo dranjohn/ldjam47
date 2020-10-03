@@ -40,14 +40,9 @@ class GameState {
 		this._talkingOptions = [];
 		this._selectedOption = 0;
 
-		this._typeoutSounds = [
-			new VolumeAudio("sound/typeout_spring.wav", 0.25),
-			new VolumeAudio("sound/typeout_summer.wav", 0.25),
-			new VolumeAudio("sound/typeout_autumn.wav", 0.25),
-			new VolumeAudio("sound/typeout_winter.wav", 0.25)
-		];
-		this._selectSound = new VolumeAudio("sound/select.wav", 0.25);
-		this._actionSound = new VolumeAudio("sound/action.wav", 0.25);
+		this._selectSound = new VolumeAudio("sound/select.wav", 0.1);
+		this._actionSound = new VolumeAudio("sound/action.wav", 0.1);
+		this._turningSound = new VolumeAudio("sound/turning.wav", 0.1);
 
 		// Load the world
 		this._isTurning = false;
@@ -116,7 +111,7 @@ class GameState {
 	_updatePlayer (deltaTime) { //function playerMoveFunction(deltaTime) {
 		// Check if the player wants to talk to a guardian
 		if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
-			//this._actionSound.play();
+			this._actionSound.play();
 			this._startTalking("This is the Question", ["Answer A", "Answer B", "Answer C"]);
 			return;
 		}
@@ -152,6 +147,7 @@ class GameState {
 				// Trigger world left rotate
 				this._targetWorldRotation -= 1;
 				this._isTurning = true;
+				this._turningSound.play();
 			}
 			if (this._playerX >= 10) {
 				this._playerX = 10;
@@ -159,6 +155,7 @@ class GameState {
 				// Trigger world right rotate
 				this._targetWorldRotation += 1;
 				this._isTurning = true;
+				this._turningSound.play();
 			}
 		} else {
 			// If the player is not moving, reset the walking animation
@@ -265,10 +262,10 @@ class GameState {
 		// Each third of the visible frame now measures 16 by 16 virtual pixels.
 		this._ctx.scale(0.25, 0.25);
 
-		if (this._isTyping) {
+		/*if (this._isTyping) {
 			this._typeoutSounds[this._worldRotation].play();
 			//this._selectSound.play();
-		}
+		}*/
 
 		let lettersLeft = Math.floor(this._talkingTimeElapsed * 20);
 
