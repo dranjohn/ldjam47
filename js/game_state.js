@@ -7,16 +7,35 @@ class GameState {
 
     // Create the player
     this._playerX = 4;
-    this._playerImage = new SrcImage("images/player.png");
+    this._playerSprites = {
+      idle: {
+        left: new SrcImage("images/player/idle_left.png"),
+        right: new SrcImage("images/player/idle_right.png")
+      },
+      turning: {
+        left: new SrcImage("images/player/turning_left.png"),
+        right: new SrcImage("images/player/turning_right.png")
+      }
+    };
+    this._playerFacingRight = true;
 
     // Load the world
     this._worldRotation = 0;
     this._targetWorldRotation = 0;
 
-    this._worldSprite = new SrcImage("images/test_picture.png");
+    this._worldSprite = new SrcImage("images/world.png");
 
   	// Create keyboard listener
   	this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight"]);
+  }
+
+
+  getPlayerSprite(baseSprite) {
+    if (this._playerFacingRight) {
+      return baseSprite.right;
+    } else {
+      return baseSprite.left;
+    }
   }
 
 
@@ -51,6 +70,7 @@ class GameState {
 
       if (dx != 0) {
         this._playerX += playerSpeed * dx * deltaTime;
+        this._playerFacingRight = dx > 0;
 
         if (this._playerX <= 1) {
           this._playerX = 1;
@@ -86,15 +106,13 @@ class GameState {
 
   renderPlayer() {
     if (this._targetWorldRotation == this._worldRotation) {
-      this._ctx.drawImage(this._playerImage, this._playerX, 2, 1, 1);
+      this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.idle), this._playerX, 2, 1, 1);
     } else {
-      //render in background coordinate system
-
       // Translate to background coordinates
   	  ctx.translate(6, -2);
   	  ctx.rotate((this._worldRotation - this._targetWorldRotation - Math.sign(this._worldRotation - this._targetWorldRotation)) * Math.PI / 2);
 
-      this._ctx.drawImage(this._playerImage, this._playerX - 6, 2 + 2, 1, 1);
+      this._ctx.drawImage(this.getPlayerSprite(this._playerSprites.turning), this._playerX - 6, 4, 1, 1);
     }
   }
 }
