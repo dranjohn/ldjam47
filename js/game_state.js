@@ -56,6 +56,10 @@ class GameState {
   update(deltaTime) {
     this._keyboard.update();
 
+    if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
+      console.log("guardian talk");
+    }
+
     if (this._worldRotation != this._targetWorldRotation) {
       // World rotation
       const rotationSpeed = 1;
