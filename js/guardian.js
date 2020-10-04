@@ -8,6 +8,8 @@ class Guardian {
 		}
 
 		this._isVisible = true;
+		this._score = 0;
+		this._hasAskedQuestion = false;
 	}
 
 	get isVisible() {
@@ -18,7 +20,36 @@ class Guardian {
 		this._isVisible = isVisible;
 	}
 
+	get score() {
+		return this._score;
+	}
+
+	set score(score) {
+		this._score = score;
+	}
+
+
 	getSprite(facingRight) {
 		return this._sprites[facingRight ? "right" : "left"];
+	}
+
+
+	getQuestion(viableOptions) {
+		this._hasAskedQuestion = true;
+
+		return {
+			question: "This is the question",
+			answers: [
+				"Spring answer",
+				"Summer answer",
+				"Autumn answer",
+				"Winter answer",
+				"Indifferent answer"
+			]
+		};
+	}
+
+	updateQuestion() {
+
 	}
 }

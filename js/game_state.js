@@ -52,12 +52,16 @@ class GameState {
 		this._isWalkingForward = true;
 
 		this._worldSprite = new SrcImage("images/world/world.png");
+
+		this._viableOptions = [0, 1, 2, 3, 4];
 		this._guardians = [
 			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png")),
 			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png")),
 			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png")),
 			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"))
 		];
+
+		this._indifferenceScore = 0;
 
 		// Create keyboard listener
 		this._keyboard = new Keyboard(["x", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
@@ -98,14 +102,18 @@ class GameState {
 		}
 	}
 
-	_updatePlayer (deltaTime) {
+	_updatePlayer(deltaTime) {
 		// Check if the player wants to talk to a guardian
+		let currentGuardian = this._guardians[this._worldRotation];
 		let inGuardianRange = 4 <= this._playerX && this._playerX <= 7;
-		let isPlayerInteracting = this._keyboard.keys.x.pressed && this._guardians[this._worldRotation].isVisible;
+		let isPlayerInteracting = this._keyboard.keys.x.pressed && currentGuardian.isVisible;
 
 		if (inGuardianRange && isPlayerInteracting) {
 			this._actionSound.play();
-			this._startTalking("This is the Question", ["Answer A", "Answer B", "Answer C"]);
+
+			let guardianQuestion = currentGuardian.getQuestion(this._viableOptions);
+			this._startTalking(guardianQuestion.question, guardianQuestion.answers);
+
 			return;
 		}
 
@@ -156,7 +164,9 @@ class GameState {
 				if (this._worldRotation === 3 && this._targetWorldRotation === 4) {
 					// Update guardian questions
 					if (this._isWalkingForward) {
-						//TODO: update guardian questions
+						for (var i = 0; i < 4; i++) {
+							this._guardians[i].updateQuestion();
+						}
 					}
 
 					// Set player into the 'overworld' cycle
@@ -176,7 +186,7 @@ class GameState {
 		}
 	}
 
-	_updateRotation (deltaTime) { // function worldRotateFunction(deltaTime) {
+	_updateRotation(deltaTime) {
 		// World rotation
 		const rotationSpeed = 1;
 
@@ -199,7 +209,7 @@ class GameState {
 		}
 	}
 
-	_updateDialog(deltaTime) { // function talkingUpdate(deltaTime) {
+	_updateDialog(deltaTime) {
 		this._talkingTimeElapsed += deltaTime;
 
 		if (!this._isTyping) {
@@ -217,6 +227,42 @@ class GameState {
 			if (this._keyboard.keys.x.pressed) {
 				this._isTalking = false;
 				this._actionSound.play();
+
+				let guardianIndex = this._viableOptions[this._selectedOption];
+				if (guardianIndex < 4) {
+					this._guardians[guardianIndex].score++;
+
+					if (this._guardians[guardianIndex].score >= 8 /*TODO: score for guardian ending*/) {
+						for (var i = 0; i < 4; i++) {
+							if (i === guardianIndex) {
+								continue;
+							}
+
+							this._guardians[i].isVisible = false;
+						}
+
+						switch (guardianIndex) {
+						case 0:
+							this._worldSprite = new SrcImage("images/world/world_spring.png");
+							break;
+						case 1:
+							this._worldSprite = new SrcImage("images/world/world_summer.png");
+							break;
+						case 2:
+							this._worldSprite = new SrcImage("images/world/world_autumn.png");
+							break;
+						case 3:
+							this._worldSprite = new SrcImage("images/world/world_winter.png");
+							break;
+						}
+					}
+				} else {
+					this._indifferenceScore++;
+
+					if (this._indifferenceScore >= 12 /*TODO: score for indif ending*/) {
+						//TODO: make indif ending
+					}
+				}
 			}
 		}
 	}
@@ -325,7 +371,7 @@ class GameState {
 
 				this._ctx.drawImage(this._guardians[i].getSprite(facingRight), 0, 3, 1, 2);
 			}
-			
+
 			ctx.rotate(-Math.PI / 2);
 		}
 
