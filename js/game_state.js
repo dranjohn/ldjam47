@@ -98,9 +98,12 @@ class GameState {
 		}
 	}
 
-	_updatePlayer (deltaTime) { //function playerMoveFunction(deltaTime) {
+	_updatePlayer (deltaTime) {
 		// Check if the player wants to talk to a guardian
-		if (this._keyboard.keys.x.pressed && 4 <= this._playerX && this._playerX <= 7) {
+		let inGuardianRange = 4 <= this._playerX && this._playerX <= 7;
+		let isPlayerInteracting = this._keyboard.keys.x.pressed && this._guardians[this._worldRotation].isVisible;
+
+		if (inGuardianRange && isPlayerInteracting) {
 			this._actionSound.play();
 			this._startTalking("This is the Question", ["Answer A", "Answer B", "Answer C"]);
 			return;
@@ -315,10 +318,14 @@ class GameState {
 
 		// Render the guardians
 		for (var i = 0; i < 4; ++i) {
-			let facingRight = this._playerX > 6;
-			let isApproaching = i === ((this._targetWorldRotation + 4) % 4);
-			facingRight ^= this._isTurning && isApproaching;
-			this._ctx.drawImage(this._guardians[i].getSprite(facingRight), 0, 3, 1, 2);
+			if (this._guardians[i].isVisible) {
+				let facingRight = this._playerX > 6;
+				let isApproaching = i === ((this._targetWorldRotation + 4) % 4);
+				facingRight ^= this._isTurning && isApproaching;
+
+				this._ctx.drawImage(this._guardians[i].getSprite(facingRight), 0, 3, 1, 2);
+			}
+			
 			ctx.rotate(-Math.PI / 2);
 		}
 

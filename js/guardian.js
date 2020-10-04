@@ -6,6 +6,16 @@ class Guardian {
 			left: leftSprite,
 			right: rightSprite
 		}
+
+		this._isVisible = true;
+	}
+
+	get isVisible() {
+		return this._isVisible;
+	}
+
+	set isVisible(isVisible) {
+		this._isVisible = isVisible;
 	}
 
 	getSprite(facingRight) {
