@@ -32,8 +32,8 @@ const GUARDIAN_QUESTIONS = [
 			}
 		],
 		indifferenceQuestion: {
-			question: "You don't like to play, do you?",
-			answers: ["Correct"],
+			question: "You're so boring. Do you even want to play with me?",
+			answers: ["No, I don't."],
 			points: [-1]
 		}
 	},
@@ -71,8 +71,8 @@ const GUARDIAN_QUESTIONS = [
 			}
 		],
 		indifferenceQuestion: {
-			question: "You don't like to play, do you?",
-			answers: ["Correct"],
+			question: "I don't think you have the ambition required for our project.",
+			answers: ["I never wanted to work with you anyway."],
 			points: [-1]
 		}
 	},
@@ -110,8 +110,8 @@ const GUARDIAN_QUESTIONS = [
 			}
 		],
 		indifferenceQuestion: {
-			question: "You don't like to play, do you?",
-			answers: ["Correct"],
+			question: "Oh, darling, you just aren't the same any more...",
+			answers: ["That's none of your business."],
 			points: [-1]
 		}
 	},
@@ -149,8 +149,8 @@ const GUARDIAN_QUESTIONS = [
 			}
 		],
 		indifferenceQuestion: {
-			question: "You don't like to play, do you?",
-			answers: ["Correct"],
+			question: "Do you even care about your life?",
+			answers: ["I don't even know."],
 			points: [-1]
 		}
 	}
