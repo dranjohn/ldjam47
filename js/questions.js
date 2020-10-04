@@ -77,7 +77,7 @@ const GUARDIAN_QUESTIONS = [
 
 		questions: [
 			{
-				question: "Are you interested in working with me?",
+				question: "We are hiring. Are you interested?",
 				answers: ["Yes", "No"],
 				points: [1, 4]
 			},
@@ -93,7 +93,7 @@ const GUARDIAN_QUESTIONS = [
       },
       {
 				question: "What do you think I'm holding in my hand?",
-				answers: ["A gem.", "A candle.", "A toy?", "Earthly possessions.", "I don't know."],
+				answers: ["A gem.", "A candle.", "A toy?", "Some earthly possession.", "I don't know."],
 				points: [1, 2, 0, 3, 4]
       },
       {
@@ -136,10 +136,30 @@ const GUARDIAN_QUESTIONS = [
 
 		questions: [
 			{
-				question: "Do you like to remember?",
+				question: "Would you like to chat for a while, darling?",
 				answers: ["Yes", "No"],
 				points: [2, 4]
-			}
+			},
+      {
+				question: "Can I offer you something to eat or drink?",
+				answers: ["Some milk and cookies, please!", "Let's cook something together.", "Thank you for the offer, but I'm in a hurry.", "No thanks, I'm on a diet.", "I'm not hungry."],
+				points: [0, 2, 1, 3, 4]
+      },
+      {
+				question: "What do you enjoy the most in your life?",
+				answers: ["My many and great achievements.", "Spending time with my family and friends.", "Discovering new things.", "Why enjoy something if it's not going to last?", "Nothing in particular."],
+				points: [1, 2, 0, 3, 4]
+      },
+      {
+				question: "What do you think I'm holding in my hand?",
+				answers: ["A sign of your decay.", "Something to support you in your everyday life.", "A walking cane.", "A magic staff?", "I don't know."],
+				points: [3, 2, 1, 0, 4]
+      },
+      {
+				question: "Do you like it around here?",
+				answers: ["It's fun to talk to the child.", "It's worthwhile to talk to the man.", "It's nice talking with you.", "It's calming to talk to the skeleton.", "Yes."],
+				points: [0, 1, 2, 3, 4]
+      }
 		],
 
 		endQuestions: [
