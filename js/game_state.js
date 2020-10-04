@@ -260,7 +260,7 @@ class GameState {
 		this._ctx.save();
 		// We need to zoom out because we cannot use a font smaller than 1px.
 		// Each third of the visible frame now measures 16 by 16 virtual pixels.
-		this._ctx.scale(0.25, 0.25);
+		this._ctx.scale(0.025, 0.025); // this._ctx.scale(0.25, 0.25);
 
 		/*if (this._isTyping) {
 			this._typeoutSounds[this._worldRotation].play();
@@ -270,7 +270,7 @@ class GameState {
 		let lettersLeft = Math.floor(this._talkingTimeElapsed * 20);
 
 		for (let i = 0; i < this._talkingMessage.length; i++) {
-			this._ctx.fillText(this._talkingMessage[i].substring(0, lettersLeft), 1, i+1);
+			this._ctx.fillText(this._talkingMessage[i].substring(0, lettersLeft), 10, (i+1)*10); // 1, i+1);
 			lettersLeft -= this._talkingMessage[i].length;
 		}
 
@@ -282,7 +282,7 @@ class GameState {
 					this._ctx.fillStyle = "gray";
 				}
 				for (let line of this._talkingOptions[i]) {
-					this._ctx.fillText(line.substring(0, lettersLeft), 33, lineNumber);
+					this._ctx.fillText(line.substring(0, lettersLeft), 330, lineNumber*10); // 33, lineNumber);
 					lettersLeft -= line.length;
 					lineNumber++;
 				}
@@ -323,10 +323,10 @@ class GameState {
 		let currentLine = [];
 
 		this._ctx.save();
-		this._ctx.scale(0.25, 0.25);
+		this._ctx.scale(0.025, 0.025); // (0.25, 0.25);
 
 		for (let word of words) {
-			if (this._ctx.measureText(currentLine.concat([word])).width > 14) {
+			if (this._ctx.measureText(currentLine.concat([word])).width > 140) { // 14) {
 				lines.push(currentLine.join(" "));
 				currentLine = [word];
 			} else {

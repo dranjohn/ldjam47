@@ -46,7 +46,7 @@ function main() {
 	ctx.imageSmoothingEnabled = false;
 
 	/* Adjustments for text rendering */
-	ctx.font = "0.8px monospace";
+	ctx.font = "8px monospace"; // "0.8px monospace";
 	ctx.textBaseline = "top";
 	ctx.fillStyle = "white";
 
