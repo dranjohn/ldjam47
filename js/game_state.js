@@ -110,11 +110,11 @@ class GameState {
 		let isPlayerInteracting = this._keyboard.keys.x.pressed && currentGuardian.isVisible;
 
 		if (inGuardianRange && isPlayerInteracting) {
-			this._actionSound.play();
-
 			let guardianQuestion = currentGuardian.getQuestion(this._viableOptions, this._isWalkingForward);
 
 			if (guardianQuestion !== undefined) {
+				this._actionSound.play();
+
 				this._questionPoints = guardianQuestion.points;
 				this._startTalking(guardianQuestion.question, guardianQuestion.answers);
 			}
@@ -220,14 +220,23 @@ class GameState {
 		if (!this._isTyping) {
 			if (this._keyboard.keys.ArrowDown.pressed) {
 				this._selectedOption++;
-				this._selectSound.play();
+
+				if (this._talkingOptions.length > 0) {
+					this._selectSound.play();
+				}
 			}
 			if (this._keyboard.keys.ArrowUp.pressed) {
 				this._selectedOption--;
-				this._selectSound.play();
+
+				if (this._talkingOptions.length > 0) {
+					this._selectSound.play();
+				}
 			}
-			this._selectedOption += this._talkingOptions.length;
-			this._selectedOption %= this._talkingOptions.length;
+
+			if (this._talkingOptions.length > 0) {
+				this._selectedOption += this._talkingOptions.length;
+				this._selectedOption %= this._talkingOptions.length;
+			}
 
 			if (this._keyboard.keys.x.pressed) {
 				this._isTalking = false;
@@ -262,7 +271,7 @@ class GameState {
 								break;
 							}
 
-
+							this._guardians[guardianIndex].win();
 						}
 					} else {
 						this._indifferenceScore++;

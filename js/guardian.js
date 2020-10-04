@@ -58,16 +58,37 @@ class Guardian {
 			return this._questionSet.underworldQuestion;
 		}
 
+		if (this._currentQuestion >= this._questionSet.questions.length) {
+			return this._questionSet.exhaustedQuestion;
+		}
+
 		if (this._hasAskedQuestion) {
 			return this._questionSet.noQuestion;
 		}
 		this._hasAskedQuestion = true;
 
-		if (this._currentQuestion >= this._questionSet.questions.length) {
-			return this._questionSet.exhaustedQuestion;
+
+		var currentQuestion = this._questionSet.questions[this._currentQuestion];
+
+		var viableAnswers = [];
+		var viablePoints = [];
+
+		var answerPointPairs = currentQuestion.answers.map((e, i) => [e, currentQuestion.points[i]]);
+		//answerPointPairs.shuffle();
+
+		for (let p of answerPointPairs) {
+			if (viableOptions.includes(p[1])) {
+				viableAnswers.push(p[0]);
+				viablePoints.push(p[1]);
+			}
 		}
 
-		return this._questionSet.questions[this._currentQuestion];
+
+		return {
+			question: currentQuestion.question,
+			answers: viableAnswers,
+			points: viablePoints
+		};
 	}
 
 	updateQuestion() {
