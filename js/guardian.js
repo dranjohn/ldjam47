@@ -16,6 +16,8 @@ class Guardian {
 
 		this._isWinner = false;
 		this._isIndifferent = false;
+
+		this._isPendingRemoval = false;
 	}
 
 	get isVisible() {
@@ -34,6 +36,14 @@ class Guardian {
 		this._score = score;
 	}
 
+	set isPendingRemoval(pendingRemoval) {
+		this._isPendingRemoval = pendingRemoval;
+	}
+
+	get isWinner() {
+		return this._isWinner;
+	}
+
 
 	win() {
 		this._isWinner = true;
@@ -45,8 +55,8 @@ class Guardian {
 		this._hasAskedQuestion = false;
 	}
 
-	resolveIndifferent() {
-		if (this._isIndifferent && this._hasAskedQuestion) {
+	resolvePendingRemoval() {
+		if (this._isPendingRemoval) {
 			this._isVisible = false;
 		}
 	}
@@ -72,6 +82,8 @@ class Guardian {
 			}
 
 			this._hasAskedQuestion = true;
+			this._isPendingRemoval = true;
+
 			return this._questionSet.indifferenceQuestion;
 		}
 

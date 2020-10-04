@@ -58,8 +58,8 @@ const GUARDIAN_QUESTIONS = [
 		questions: [
 			{
 				question: "Do you like to work?",
-				answers: ["Yes", "No"],
-				points: [1, 4]
+				answers: ["Yes", "Less than playing", "No"],
+				points: [1, 0, 4]
 			}
 		],
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const WIN_SCORE = 8;
+const WIN_SCORE = 2;
 const INDIFFERENCE_SCORE = 12;
 
 class GameState {
@@ -55,6 +55,12 @@ class GameState {
 		this._isWalkingForward = true;
 
 		this._worldSprite = new SrcImage("images/world/world.png");
+		this._winningWorldSprites = [
+			new SrcImage("images/world/world_spring.png"),
+			new SrcImage("images/world/world_summer.png"),
+			new SrcImage("images/world/world_autumn.png"),
+			new SrcImage("images/world/world_winter.png")
+		]
 
 		this._unlockedOptions = [4];
 		this._removedOptions = [];
@@ -227,7 +233,7 @@ class GameState {
 
 			// Remove indifferent guardians
 			for (var i = 0; i < 4; ++i) {
-				this._guardians[i].resolveIndifferent();
+				this._guardians[i].resolvePendingRemoval();
 			}
 		} else {
 			this._worldRotation += rotationSpeed * dr * deltaTime;
@@ -277,29 +283,21 @@ class GameState {
 					}
 
 					if (this._guardians[guardianIndex].score >= WIN_SCORE) {
+						// Remove guardians that are not the winner
 						for (var i = 0; i < 4; i++) {
 							if (i === guardianIndex) {
+								continue;
+							}
+
+							if (i === this._worldRotation) {
+								this._guardians[i].isPendingRemoval = true;
 								continue;
 							}
 
 							this._guardians[i].isVisible = false;
 						}
 
-						switch (guardianIndex) {
-						case 0:
-							this._worldSprite = new SrcImage("images/world/world_spring.png");
-							break;
-						case 1:
-							this._worldSprite = new SrcImage("images/world/world_summer.png");
-							break;
-						case 2:
-							this._worldSprite = new SrcImage("images/world/world_autumn.png");
-							break;
-						case 3:
-							this._worldSprite = new SrcImage("images/world/world_winter.png");
-							break;
-						}
-
+						// Give the winner the winning flag
 						this._guardians[guardianIndex].win();
 					}
 				} else {
@@ -313,6 +311,11 @@ class GameState {
 				}
 
 				//one score point has been assigned
+			}
+
+			if (this._guardians[this._worldRotation].isWinner) {
+				// Change the world to the winners world
+				this._worldSprite = this._winningWorldSprites[this._worldRotation];
 			}
 		}
 	}
