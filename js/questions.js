@@ -18,10 +18,30 @@ const GUARDIAN_QUESTIONS = [
 
 		questions: [
 			{
-				question: "Do you like to play?",
+				question: "Do you want to play with me?",
 				answers: ["Yes", "No"],
 				points: [0, 4]
-			}
+			},
+      {
+				question: "I want to play something fun! What's your favorite game?",
+				answers: ["Tag.", "Chess.", "I don't have one.", "I've played so many games, I really can't remember.", "Life as a whole is a game."],
+				points: [0, 1, 4, 2, 3]
+      },
+      {
+				question: "The skeleton over there looks so spooky! What scares you the most?",
+				answers: ["Yes, definitely skeletons. And chess.", "Forgetting something important.", "Being late to work.", "Death. The destruction of life.", "I'm not scared of anything."],
+				points: [0, 2, 1, 3, 4]
+      },
+      {
+				question: "I just woke up from my nap. Do you have to take naps too?",
+				answers: ["No.", "I'm usually too busy for that.", "Sometimes when I'm really tired, I do.", "I remember taking naps as a child. Those were good times!", "A long nap sure sounds nice."],
+				points: [4, 1, 0, 2, 3]
+      },
+      {
+				question: "What's your favorite dinosaur?",
+				answers: ["T-Rex!", "Pterodactyl.", "Brontosaurus.", "Stegosaurus.", "I don't have one."],
+				points: [0, 1, 2, 3, 4]
+      }
 		],
 
 		endQuestions: [
