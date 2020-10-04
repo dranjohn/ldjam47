@@ -55,9 +55,9 @@ class GameState {
 		this._talkingOptions = [];
 		this._selectedOption = 0;
 
-		this._selectSound = new VolumeAudio("sound/select.wav", 0.1);
-		this._actionSound = new VolumeAudio("sound/action.wav", 0.1);
-		this._turningSound = new VolumeAudio("sound/turning.wav", 0.1);
+		this._selectSound = new AudioWrapper("sound/select.wav", 0.1, 1);
+		this._actionSound = new AudioWrapper("sound/action.wav", 0.1, 1);
+		this._turningSound = new AudioWrapper("sound/turning.ogg", 0.25, 1.5);
 
 		// Load the world
 		this._isTurning = false;
@@ -234,6 +234,8 @@ class GameState {
 
 		if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
 			// Rotation has completed
+			this._turningSound.stop();
+
 			// Set the world rotation into the [0, 3] range
 			this._targetWorldRotation += 4;
 			this._targetWorldRotation %= 4;
