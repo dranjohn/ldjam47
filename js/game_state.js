@@ -49,6 +49,8 @@ class GameState {
 		this._worldRotation = 0;
 		this._targetWorldRotation = 0;
 
+		this._isWalkingForward = true;
+
 		this._worldSprite = new SrcImage("images/world/world.png");
 		this._guardianSprites = [
 			{
@@ -156,6 +158,25 @@ class GameState {
 				this._targetWorldRotation += 1;
 				this._isTurning = true;
 				this._turningSound.play();
+			}
+
+			if (this._isTurning) {
+				// If the turn is from winter to spring
+				if (this._worldRotation === 3 && this._targetWorldRotation === 4) {
+					// Update guardian questions
+					if (this._isWalkingForward) {
+						//TODO: update guardian questions
+					}
+
+					// Set player into the 'overworld' cycle
+					this._isWalkingForward = true;
+				}
+
+				// If the turn from spring to winter
+				if (this._worldRotation === 0 && this._targetWorldRotation === -1) {
+					// Set player into the 'underworld' cycle
+					this._isWalkingForward = false;
+				}
 			}
 		} else {
 			// If the player is not moving, reset the walking animation
