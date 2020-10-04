@@ -39,7 +39,7 @@ const GUARDIAN_QUESTIONS = [
       },
       {
 				question: "What's your favorite dinosaur?",
-				answers: ["T-Rex!", "Pterodactyl.", "Brontosaurus.", "Stegosaurus.", "I don't have one."],
+				answers: ["T-Rex!", "Velociraptor.", "Brontosaurus.", "Stegosaurus.", "I don't have one."],
 				points: [0, 1, 2, 3, 4]
       }
 		],
@@ -77,10 +77,30 @@ const GUARDIAN_QUESTIONS = [
 
 		questions: [
 			{
-				question: "Do you like to work?",
+				question: "Are you interested in working with me?",
 				answers: ["Yes", "No"],
 				points: [1, 4]
-			}
+			},
+      {
+				question: "Where do you see yourself in 10 years?",
+				answers: ["In school.", "In a well-paid job.", "In a warm house with a big family.", "I can't tell. Life happens on its own.", "I don't have any plans yet."],
+				points: [0, 1, 2, 3, 4]
+      },
+      {
+				question: "When did you realize you aren't a child anymore?",
+				answers: ["When I stopped being curious.", "When life started to become boring.", "Oh, I still feel like a child, just a bit older.", "When I turned 18 years old.", "I never thought about that."],
+				points: [3, 0, 2, 1, 4]
+      },
+      {
+				question: "What do you think I'm holding in my hand?",
+				answers: ["A gem.", "A candle.", "A toy?", "Earthly possessions.", "I don't know."],
+				points: [1, 2, 0, 3, 4]
+      },
+      {
+				question: "When do you usually go to bed?",
+				answers: ["After watching my favorite show.", "After watching the news.", "After watching the sunset.", "When I'm tired.", "It varies."],
+				points: [0, 1, 2, 3, 4]
+      }
 		],
 
 		endQuestions: [
