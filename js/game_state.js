@@ -55,9 +55,10 @@ class GameState {
 		this._talkingOptions = [];
 		this._selectedOption = 0;
 
-		this._selectSound = new AudioWrapper("sound/select.wav", 0.1, 1);
-		this._actionSound = new AudioWrapper("sound/action.wav", 0.1, 1);
-		this._turningSound = new AudioWrapper("sound/turning.ogg", 0.25, 1.5);
+		this._selectSound = new AudioWrapper("sound/select.wav", 0.1, 1, false);
+		this._actionSound = new AudioWrapper("sound/action.wav", 0.1, 1, false);
+		this._turningSound = new AudioWrapper("sound/turning.ogg", 0.25, 1.6, false);
+		this._typeoutSound = new AudioWrapper("sound/typeout.ogg", 0.25, 1, true);
 
 		// Load the world
 		this._isTurning = false;
@@ -110,6 +111,8 @@ class GameState {
 		}
 		this._selectedOption = 0;
 		this._isTyping = true;
+
+		this._typeoutSound.play();
 	}
 
 
@@ -148,7 +151,7 @@ class GameState {
 			let guardianQuestion = currentGuardian.getQuestion(viableOptions, this._isWalkingForward);
 
 			if (guardianQuestion !== undefined) {
-				this._actionSound.play();
+				//this._actionSound.play();
 
 				this._questionPoints = guardianQuestion.points;
 				this._startTalking(guardianQuestion.question, guardianQuestion.answers);
@@ -458,6 +461,10 @@ class GameState {
 			}
 
 			this._isTyping = (lettersLeft < 0);
+
+			if (!this._isTyping) {
+				this._typeoutSound.stop();
+			}
 		}
 
 		this._ctx.restore();
