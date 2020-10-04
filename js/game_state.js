@@ -287,15 +287,16 @@ class GameState {
 					if (this._guardians[guardianIndex].score === 1) {
 						this._unlockedOptions.push(guardianIndex);
 					}
+					
+
+					let lowestScore = WIN_SCORE;
+					let lowestScoreGuardians = [];
 
 					switch (this._guardians[guardianIndex].score) {
 					case FIRST_REMOVAL_SCORE:
 						if (this._removedOptions.length > 0) {
 							break;
 						}
-
-						let lowestScore = WIN_SCORE;
-						let lowestScoreGuardians = [];
 
 						for (let i = 0; i < 4; ++i) {
 							if (this._guardians[i].score < lowestScore) {
@@ -313,9 +314,6 @@ class GameState {
 						if (this._removedOptions.length > 1) {
 							break;
 						}
-
-						let lowestScore = WIN_SCORE;
-						let lowestScoreGuardians = [];
 
 						for (let i = 0; i < 4; ++i) {
 							if (i === this._removedOptions[0]) {
