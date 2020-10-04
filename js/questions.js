@@ -195,10 +195,30 @@ const GUARDIAN_QUESTIONS = [
 
 		questions: [
 			{
-				question: "Do you like to live?",
-				answers: ["Yes", "No"],
+				question: "Are you afraid of me?",
+				answers: ["No", "Yes"],
 				points: [3, 4]
-			}
+			},
+      {
+				question: "What do you think happens after death?",
+				answers: ["I know that the ones who love us will miss us.", "We will go to heaven.", "My life insurance finally pays off.", "As long as I live, it doesn't matter.", "I don't know."],
+				points: [2, 0, 1, 3, 4]
+      },
+      {
+				question: "Do you value having a peaceful life?",
+				answers: ["Yes, stability is important for me to thrive.", "No, I need adventures.", "Life itself is everything but peaceful.", "I regret not doing more while I still could.", "I don't care."],
+				points: [1, 0, 3, 2, 4]
+      },
+      {
+				question: "What do you think of the night sky?",
+				answers: ["It's beautiful.", "It makes me feel small and unimportant.", "I like seeing so many constellations.", "You don't see much of it in the city.", "Looks okay."],
+				points: [2, 3, 0, 1, 4]
+      },
+      {
+				question: "Do you often go to the graveyard?",
+				answers: ["No, graveyards are scary.", "I only go there when I have to.", "Yes, many of my loved ones lie there.", "Yes, I feel at peace there.", "No."],
+				points: [0, 1, 2, 3, 4]
+      }
 		],
 
 		endQuestions: [
