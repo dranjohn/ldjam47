@@ -112,10 +112,12 @@ class GameState {
 		if (inGuardianRange && isPlayerInteracting) {
 			this._actionSound.play();
 
-			let guardianQuestion = currentGuardian.getQuestion(this._viableOptions);
+			let guardianQuestion = currentGuardian.getQuestion(this._viableOptions, this._isWalkingForward);
 
-			this._questionPoints = guardianQuestion.points;
-			this._startTalking(guardianQuestion.question, guardianQuestion.answers);
+			if (guardianQuestion !== undefined) {
+				this._questionPoints = guardianQuestion.points;
+				this._startTalking(guardianQuestion.question, guardianQuestion.answers);
+			}
 
 			return;
 		}
@@ -231,39 +233,43 @@ class GameState {
 				this._isTalking = false;
 				this._actionSound.play();
 
-				let guardianIndex = this._questionPoints[this._selectedOption];
-				if (guardianIndex < 4) {
-					this._guardians[guardianIndex].score++;
+				if (this._questionPoints !== []) {
+					let guardianIndex = this._questionPoints[this._selectedOption];
+					if (guardianIndex < 4) {
+						this._guardians[guardianIndex].score++;
 
-					if (this._guardians[guardianIndex].score >= 8 /*TODO: score for guardian ending*/) {
-						for (var i = 0; i < 4; i++) {
-							if (i === guardianIndex) {
-								continue;
+						if (this._guardians[guardianIndex].score >= 8 /*TODO: score for guardian ending*/) {
+							for (var i = 0; i < 4; i++) {
+								if (i === guardianIndex) {
+									continue;
+								}
+
+								this._guardians[i].isVisible = false;
 							}
 
-							this._guardians[i].isVisible = false;
-						}
+							switch (guardianIndex) {
+							case 0:
+								this._worldSprite = new SrcImage("images/world/world_spring.png");
+								break;
+							case 1:
+								this._worldSprite = new SrcImage("images/world/world_summer.png");
+								break;
+							case 2:
+								this._worldSprite = new SrcImage("images/world/world_autumn.png");
+								break;
+							case 3:
+								this._worldSprite = new SrcImage("images/world/world_winter.png");
+								break;
+							}
 
-						switch (guardianIndex) {
-						case 0:
-							this._worldSprite = new SrcImage("images/world/world_spring.png");
-							break;
-						case 1:
-							this._worldSprite = new SrcImage("images/world/world_summer.png");
-							break;
-						case 2:
-							this._worldSprite = new SrcImage("images/world/world_autumn.png");
-							break;
-						case 3:
-							this._worldSprite = new SrcImage("images/world/world_winter.png");
-							break;
-						}
-					}
-				} else {
-					this._indifferenceScore++;
 
-					if (this._indifferenceScore >= 12 /*TODO: score for indif ending*/) {
-						//TODO: make indif ending
+						}
+					} else {
+						this._indifferenceScore++;
+
+						if (this._indifferenceScore >= 12 /*TODO: score for indif ending*/) {
+							//TODO: make indif ending
+						}
 					}
 				}
 			}

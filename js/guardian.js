@@ -13,6 +13,8 @@ class Guardian {
 		this._hasAskedQuestion = false;
 		this._currentQuestion = 0;
 		this._questionSet = questionSet;
+
+		this._isWinner = false;
 	}
 
 	get isVisible() {
@@ -32,20 +34,49 @@ class Guardian {
 	}
 
 
+	win() {
+		this._isWinner = true;
+		this._currentQuestion = 0;
+	}
+
+
 	getSprite(facingRight) {
 		return this._sprites[facingRight ? "right" : "left"];
 	}
 
 
-	getQuestion(viableOptions) {
+	getQuestion(viableOptions, isInOverworld) {
+		if (this._isWinner) {
+			if (this._currentQuestion >= this._questionSet.endQuestions.length) {
+				return undefined;
+			}
+
+			return this._questionSet.endQuestions[this._currentQuestion++];
+		}
+
+		if (!isInOverworld) {
+			return this._questionSet.underworldQuestion;
+		}
+
+		if (this._hasAskedQuestion) {
+			return this._questionSet.noQuestion;
+		}
 		this._hasAskedQuestion = true;
 
-		return this._questionSet[this._currentQuestion];
+		if (this._currentQuestion >= this._questionSet.questions.length) {
+			return this._questionSet.exhaustedQuestion;
+		}
+
+		return this._questionSet.questions[this._currentQuestion];
 	}
 
 	updateQuestion() {
+		if (this._isWinner) {
+			return;
+		}
+
 		if (this._hasAskedQuestion) {
-			if (this._currentQuestion < this._questionSet.length - 1) {
+			if (this._currentQuestion < this._questionSet.questions.length) {
 					this._currentQuestion++;
 			}
 
