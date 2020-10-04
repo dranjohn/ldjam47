@@ -1,10 +1,19 @@
 'use strict';
 
-const FIRST_REMOVAL_SCORE = 3;
-const SECOND_REMOVAL_SCORE = 6;
+const FIRST_REMOVAL_SCORE = 2;
+const SECOND_REMOVAL_SCORE = 4;
 
-const WIN_SCORE = 8;
-const INDIFFERENCE_SCORE = 12;
+const WIN_SCORE = 6;
+const INDIFFERENCE_SCORE = 6;
+/*
+#Q = number of questions per character
+WS = required score for winning
+IS = required score for the indifference ending
+FRS/SRS = first/second removal score
+
+IS = 4 * #Q - (FRS + SRS + 2 * WS - 4)
+IS = 4 * 5 - (2 + 4 + 2 * 6 - 4)
+*/
 
 class GameState {
 	constructor(ctx) {
@@ -287,7 +296,7 @@ class GameState {
 					if (this._guardians[guardianIndex].score === 1) {
 						this._unlockedOptions.push(guardianIndex);
 					}
-					
+
 
 					let lowestScore = WIN_SCORE;
 					let lowestScoreGuardians = [];
