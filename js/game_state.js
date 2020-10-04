@@ -1,6 +1,9 @@
 'use strict';
 
-const WIN_SCORE = 2;
+const FIRST_REMOVAL_SCORE = 3;
+const SECOND_REMOVAL_SCORE = 6;
+
+const WIN_SCORE = 8;
 const INDIFFERENCE_SCORE = 12;
 
 class GameState {
@@ -62,7 +65,7 @@ class GameState {
 			new SrcImage("images/world/world_winter.png")
 		]
 
-		this._unlockedOptions = [4];
+		this._unlockedOptions = [-1, 4];
 		this._removedOptions = [];
 		this._guardians = [
 			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png"), GUARDIAN_QUESTIONS[0]),
@@ -271,9 +274,12 @@ class GameState {
 			this._isTalking = false;
 			this._actionSound.play();
 
-			if (this._questionPoints !== []) {
+			if (this._guardians[this._worldRotation].isWinner) {
+				// Change the world to the winners world
+				this._worldSprite = this._winningWorldSprites[this._worldRotation];
+			} else if (this._questionPoints !== []) {
 				let guardianIndex = this._questionPoints[this._selectedOption];
-				if (guardianIndex < 4) {
+				if (0 <= guardianIndex && guardianIndex < 4) {
 					// Increase guardian score
 					this._guardians[guardianIndex].score++;
 
@@ -282,7 +288,52 @@ class GameState {
 						this._unlockedOptions.push(guardianIndex);
 					}
 
-					if (this._guardians[guardianIndex].score >= WIN_SCORE) {
+					switch (this._guardians[guardianIndex].score) {
+					case FIRST_REMOVAL_SCORE:
+						if (this._removedOptions.length > 0) {
+							break;
+						}
+
+						let lowestScore = WIN_SCORE;
+						let lowestScoreGuardians = [];
+
+						for (let i = 0; i < 4; ++i) {
+							if (this._guardians[i].score < lowestScore) {
+								lowestScoreGuardians = [i];
+								lowestScore = this._guardians[i].score;
+							} else if (this._guardians[i].score === lowestScore) {
+								lowestScoreGuardians.push(i);
+							}
+						}
+
+						this._removedOptions.push(lowestScoreGuardians[Math.floor(Math.random() * lowestScoreGuardians.length)]);
+
+						break;
+					case SECOND_REMOVAL_SCORE:
+						if (this._removedOptions.length > 1) {
+							break;
+						}
+
+						let lowestScore = WIN_SCORE;
+						let lowestScoreGuardians = [];
+
+						for (let i = 0; i < 4; ++i) {
+							if (i === this._removedOptions[0]) {
+								continue;
+							}
+
+							if (this._guardians[i].score < lowestScore) {
+								lowestScoreGuardians = [i];
+								lowestScore = this._guardians[i].score;
+							} else if (this._guardians[i].score === lowestScore) {
+								lowestScoreGuardians.push(i);
+							}
+						}
+
+						this._removedOptions.push(lowestScoreGuardians[Math.floor(Math.random() * lowestScoreGuardians.length)]);
+
+						break;
+					case WIN_SCORE:
 						// Remove guardians that are not the winner
 						for (var i = 0; i < 4; i++) {
 							if (i === guardianIndex) {
@@ -299,23 +350,19 @@ class GameState {
 
 						// Give the winner the winning flag
 						this._guardians[guardianIndex].win();
+						break;
+					default:
+						break;
 					}
-				} else {
+				} else if (guardianIndex === 4) {
 					this._indifferenceScore++;
 
-					if (this._indifferenceScore == INDIFFERENCE_SCORE) {
+					if (this._indifferenceScore === INDIFFERENCE_SCORE) {
 						for (var i = 0; i < 4; i++) {
-							this._guardians[i].makeIndifferent();
+							this._guardians[i].isIndifferent = true;
 						}
 					}
 				}
-
-				//one score point has been assigned
-			}
-
-			if (this._guardians[this._worldRotation].isWinner) {
-				// Change the world to the winners world
-				this._worldSprite = this._winningWorldSprites[this._worldRotation];
 			}
 		}
 	}

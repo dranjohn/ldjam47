@@ -44,15 +44,14 @@ class Guardian {
 		return this._isWinner;
 	}
 
+	set isIndifferent(indifferent) {
+		this._isIndifferent = indifferent;
+	}
+
 
 	win() {
 		this._isWinner = true;
 		this._currentQuestion = 0;
-	}
-
-	makeIndifferent() {
-		this._isIndifferent = true;
-		this._hasAskedQuestion = false;
 	}
 
 	resolvePendingRemoval() {
@@ -68,6 +67,10 @@ class Guardian {
 
 
 	getQuestion(viableOptions, isInOverworld) {
+		if (this._isPendingRemoval) {
+			return undefined;
+		}
+
 		if (this._isWinner) {
 			if (this._currentQuestion >= this._questionSet.endQuestions.length) {
 				return undefined;
@@ -77,11 +80,6 @@ class Guardian {
 		}
 
 		if (this._isIndifferent) {
-			if (this._hasAskedQuestion) {
-				return undefined;
-			}
-
-			this._hasAskedQuestion = true;
 			this._isPendingRemoval = true;
 
 			return this._questionSet.indifferenceQuestion;
