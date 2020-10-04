@@ -15,6 +15,7 @@ class Guardian {
 		this._questionSet = questionSet;
 
 		this._isWinner = false;
+		this._isIndifferent = false;
 	}
 
 	get isVisible() {
@@ -39,6 +40,17 @@ class Guardian {
 		this._currentQuestion = 0;
 	}
 
+	makeIndifferent() {
+		this._isIndifferent = true;
+		this._hasAskedQuestion = false;
+	}
+
+	resolveIndifferent() {
+		if (this._isIndifferent && this._hasAskedQuestion) {
+			this._isVisible = false;
+		}
+	}
+
 
 	getSprite(facingRight) {
 		return this._sprites[facingRight ? "right" : "left"];
@@ -53,6 +65,16 @@ class Guardian {
 
 			return this._questionSet.endQuestions[this._currentQuestion++];
 		}
+
+		if (this._isIndifferent) {
+			if (this._hasAskedQuestion) {
+				return undefined;
+			}
+			
+			this._hasAskedQuestion = true;
+			return this._questionSet.indifferenceQuestion;
+		}
+
 
 		if (!isInOverworld) {
 			return this._questionSet.underworldQuestion;

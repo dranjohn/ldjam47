@@ -1,5 +1,8 @@
 'use strict';
 
+const WIN_SCORE = 8;
+const INDIFFERENCE_SCORE = 12;
+
 class GameState {
 	constructor(ctx) {
 		// Store the canvas context
@@ -199,16 +202,19 @@ class GameState {
 
 		if (Math.abs(this._targetWorldRotation - this._worldRotation) <= Math.abs(rotationSpeed * dr * deltaTime)) {
 			// Rotation has completed
+			// Set the world rotation into the [0, 3] range
+			this._targetWorldRotation += 4;
+			this._targetWorldRotation %= 4;
 			this._worldRotation = this._targetWorldRotation;
 
 			// Update player
 			this._playerX = (this._playerX > 5.5) ? 1 : 10;
 			this._isTurning = false;
 
-			// Set the world rotation into the [0, 3] range
-			this._worldRotation += 4;
-			this._worldRotation %= 4;
-			this._targetWorldRotation = this._worldRotation;
+			// Remove indifferent guardians
+			for (var i = 0; i < 4; ++i) {
+				this._guardians[i].resolveIndifferent();
+			}
 		} else {
 			this._worldRotation += rotationSpeed * dr * deltaTime;
 		}
@@ -247,7 +253,7 @@ class GameState {
 					if (guardianIndex < 4) {
 						this._guardians[guardianIndex].score++;
 
-						if (this._guardians[guardianIndex].score >= 8 /*TODO: score for guardian ending*/) {
+						if (this._guardians[guardianIndex].score >= WIN_SCORE) {
 							for (var i = 0; i < 4; i++) {
 								if (i === guardianIndex) {
 									continue;
@@ -276,8 +282,10 @@ class GameState {
 					} else {
 						this._indifferenceScore++;
 
-						if (this._indifferenceScore >= 12 /*TODO: score for indif ending*/) {
-							//TODO: make indif ending
+						if (this._indifferenceScore == INDIFFERENCE_SCORE) {
+							for (var i = 0; i < 4; i++) {
+								this._guardians[i].makeIndifferent();
+							}
 						}
 					}
 				}

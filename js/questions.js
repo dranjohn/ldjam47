@@ -30,7 +30,12 @@ const GUARDIAN_QUESTIONS = [
 				answers: [],
 				points: []
 			}
-		]
+		],
+		indifferenceQuestion: {
+			question: "You don't like to play, do you?",
+			answers: ["Correct"],
+			points: [4]
+		}
 	},
 
 	{
@@ -64,7 +69,12 @@ const GUARDIAN_QUESTIONS = [
 				answers: [],
 				points: []
 			}
-		]
+		],
+		indifferenceQuestion: {
+			question: "You don't like to play, do you?",
+			answers: ["Correct"],
+			points: [4]
+		}
 	},
 
 	{
@@ -98,7 +108,12 @@ const GUARDIAN_QUESTIONS = [
 				answers: [],
 				points: []
 			}
-		]
+		],
+		indifferenceQuestion: {
+			question: "You don't like to play, do you?",
+			answers: ["Correct"],
+			points: [4]
+		}
 	},
 
 	{
@@ -132,6 +147,11 @@ const GUARDIAN_QUESTIONS = [
 				answers: [],
 				points: []
 			}
-		]
+		],
+		indifferenceQuestion: {
+			question: "You don't like to play, do you?",
+			answers: ["Correct"],
+			points: [4]
+		}
 	}
 ]
