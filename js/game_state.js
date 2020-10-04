@@ -52,23 +52,11 @@ class GameState {
 		this._isWalkingForward = true;
 
 		this._worldSprite = new SrcImage("images/world/world.png");
-		this._guardianSprites = [
-			{
-				left: new SrcImage("images/guardian/spring_left.png"),
-				right: new SrcImage("images/guardian/spring_right.png")
-			},
-			{
-				left: new SrcImage("images/guardian/summer_left.png"),
-				right: new SrcImage("images/guardian/summer_right.png")
-			},
-			{
-				left: new SrcImage("images/guardian/autumn_left.png"),
-				right: new SrcImage("images/guardian/autumn_right.png")
-			},
-			{
-				left: new SrcImage("images/guardian/winter_left.png"),
-				right: new SrcImage("images/guardian/winter_right.png")
-			}
+		this._guardians = [
+			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png")),
+			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png")),
+			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png")),
+			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"))
 		];
 
 		// Create keyboard listener
@@ -330,7 +318,7 @@ class GameState {
 			let facingRight = this._playerX > 6;
 			let isApproaching = i === ((this._targetWorldRotation + 4) % 4);
 			facingRight ^= this._isTurning && isApproaching;
-			this._ctx.drawImage(this._guardianSprites[i][facingRight ? "right" : "left"], 0, 3, 1, 2);
+			this._ctx.drawImage(this._guardians[i].getSprite(facingRight), 0, 3, 1, 2);
 			ctx.rotate(-Math.PI / 2);
 		}
 
