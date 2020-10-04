@@ -56,7 +56,8 @@ class GameState {
 
 		this._worldSprite = new SrcImage("images/world/world.png");
 
-		this._viableOptions = [0, 1, 2, 3, 4];
+		this._unlockedOptions = [4];
+		this._removedOptions = [];
 		this._guardians = [
 			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png"), GUARDIAN_QUESTIONS[0]),
 			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png"), GUARDIAN_QUESTIONS[1]),
@@ -113,7 +114,20 @@ class GameState {
 		let isPlayerInteracting = this._keyboard.keys.x.pressed && currentGuardian.isVisible;
 
 		if (inGuardianRange && isPlayerInteracting) {
-			let guardianQuestion = currentGuardian.getQuestion(this._viableOptions, this._isWalkingForward);
+			let viableOptions = []; // (unlocked U [i]) \cap (viable)
+			for (let i = 0; i <= 4; ++i) {
+				if (!this._unlockedOptions.includes(i) && i !== this._worldRotation) {
+					continue;
+				}
+
+				if (this._removedOptions.includes(i)) {
+					continue;
+				}
+
+				viableOptions.push(i);
+			}
+
+			let guardianQuestion = currentGuardian.getQuestion(viableOptions, this._isWalkingForward);
 
 			if (guardianQuestion !== undefined) {
 				this._actionSound.play();
@@ -223,72 +237,82 @@ class GameState {
 	_updateDialog(deltaTime) {
 		this._talkingTimeElapsed += deltaTime;
 
-		if (!this._isTyping) {
-			if (this._keyboard.keys.ArrowDown.pressed) {
-				this._selectedOption++;
+		if (this._isTyping) {
+			return;
+		}
 
-				if (this._talkingOptions.length > 0) {
-					this._selectSound.play();
-				}
-			}
-			if (this._keyboard.keys.ArrowUp.pressed) {
-				this._selectedOption--;
-
-				if (this._talkingOptions.length > 0) {
-					this._selectSound.play();
-				}
-			}
+		if (this._keyboard.keys.ArrowDown.pressed) {
+			this._selectedOption++;
 
 			if (this._talkingOptions.length > 0) {
-				this._selectedOption += this._talkingOptions.length;
-				this._selectedOption %= this._talkingOptions.length;
+				this._selectSound.play();
 			}
+		}
+		if (this._keyboard.keys.ArrowUp.pressed) {
+			this._selectedOption--;
 
-			if (this._keyboard.keys.x.pressed) {
-				this._isTalking = false;
-				this._actionSound.play();
+			if (this._talkingOptions.length > 0) {
+				this._selectSound.play();
+			}
+		}
 
-				if (this._questionPoints !== []) {
-					let guardianIndex = this._questionPoints[this._selectedOption];
-					if (guardianIndex < 4) {
-						this._guardians[guardianIndex].score++;
+		if (this._talkingOptions.length > 0) {
+			this._selectedOption += this._talkingOptions.length;
+			this._selectedOption %= this._talkingOptions.length;
+		}
 
-						if (this._guardians[guardianIndex].score >= WIN_SCORE) {
-							for (var i = 0; i < 4; i++) {
-								if (i === guardianIndex) {
-									continue;
-								}
+		if (this._keyboard.keys.x.pressed) {
+			this._isTalking = false;
+			this._actionSound.play();
 
-								this._guardians[i].isVisible = false;
+			if (this._questionPoints !== []) {
+				let guardianIndex = this._questionPoints[this._selectedOption];
+				if (guardianIndex < 4) {
+					// Increase guardian score
+					this._guardians[guardianIndex].score++;
+
+					// Unlock guardian
+					if (this._guardians[guardianIndex].score === 1) {
+						this._unlockedOptions.push(guardianIndex);
+					}
+
+					if (this._guardians[guardianIndex].score >= WIN_SCORE) {
+						for (var i = 0; i < 4; i++) {
+							if (i === guardianIndex) {
+								continue;
 							}
 
-							switch (guardianIndex) {
-							case 0:
-								this._worldSprite = new SrcImage("images/world/world_spring.png");
-								break;
-							case 1:
-								this._worldSprite = new SrcImage("images/world/world_summer.png");
-								break;
-							case 2:
-								this._worldSprite = new SrcImage("images/world/world_autumn.png");
-								break;
-							case 3:
-								this._worldSprite = new SrcImage("images/world/world_winter.png");
-								break;
-							}
-
-							this._guardians[guardianIndex].win();
+							this._guardians[i].isVisible = false;
 						}
-					} else {
-						this._indifferenceScore++;
 
-						if (this._indifferenceScore == INDIFFERENCE_SCORE) {
-							for (var i = 0; i < 4; i++) {
-								this._guardians[i].makeIndifferent();
-							}
+						switch (guardianIndex) {
+						case 0:
+							this._worldSprite = new SrcImage("images/world/world_spring.png");
+							break;
+						case 1:
+							this._worldSprite = new SrcImage("images/world/world_summer.png");
+							break;
+						case 2:
+							this._worldSprite = new SrcImage("images/world/world_autumn.png");
+							break;
+						case 3:
+							this._worldSprite = new SrcImage("images/world/world_winter.png");
+							break;
+						}
+
+						this._guardians[guardianIndex].win();
+					}
+				} else {
+					this._indifferenceScore++;
+
+					if (this._indifferenceScore == INDIFFERENCE_SCORE) {
+						for (var i = 0; i < 4; i++) {
+							this._guardians[i].makeIndifferent();
 						}
 					}
 				}
+
+				//one score point has been assigned
 			}
 		}
 	}

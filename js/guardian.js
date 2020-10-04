@@ -70,7 +70,7 @@ class Guardian {
 			if (this._hasAskedQuestion) {
 				return undefined;
 			}
-			
+
 			this._hasAskedQuestion = true;
 			return this._questionSet.indifferenceQuestion;
 		}
