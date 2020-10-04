@@ -1,7 +1,7 @@
 'use strict';
 
 class Guardian {
-	constructor(leftSprite, rightSprite) {
+	constructor(leftSprite, rightSprite, questionSet) {
 		this._sprites = {
 			left: leftSprite,
 			right: rightSprite
@@ -9,7 +9,10 @@ class Guardian {
 
 		this._isVisible = true;
 		this._score = 0;
+
 		this._hasAskedQuestion = false;
+		this._currentQuestion = 0;
+		this._questionSet = questionSet;
 	}
 
 	get isVisible() {
@@ -37,19 +40,16 @@ class Guardian {
 	getQuestion(viableOptions) {
 		this._hasAskedQuestion = true;
 
-		return {
-			question: "This is the question",
-			answers: [
-				"Spring answer",
-				"Summer answer",
-				"Autumn answer",
-				"Winter answer",
-				"Indifferent answer"
-			]
-		};
+		return this._questionSet[this._currentQuestion];
 	}
 
 	updateQuestion() {
+		if (this._hasAskedQuestion) {
+			if (this._currentQuestion < this._questionSet.length - 1) {
+					this._currentQuestion++;
+			}
 
+			this._hasAskedQuestion = false;
+		}
 	}
 }

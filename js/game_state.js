@@ -55,12 +55,13 @@ class GameState {
 
 		this._viableOptions = [0, 1, 2, 3, 4];
 		this._guardians = [
-			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png")),
-			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png")),
-			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png")),
-			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"))
+			new Guardian(new SrcImage("images/guardian/spring_left.png"), new SrcImage("images/guardian/spring_right.png"), GUARDIAN_QUESTIONS[0]),
+			new Guardian(new SrcImage("images/guardian/summer_left.png"), new SrcImage("images/guardian/summer_right.png"), GUARDIAN_QUESTIONS[1]),
+			new Guardian(new SrcImage("images/guardian/autumn_left.png"), new SrcImage("images/guardian/autumn_right.png"), GUARDIAN_QUESTIONS[2]),
+			new Guardian(new SrcImage("images/guardian/winter_left.png"), new SrcImage("images/guardian/winter_right.png"), GUARDIAN_QUESTIONS[3])
 		];
 
+		this._questionPoints = [];
 		this._indifferenceScore = 0;
 
 		// Create keyboard listener
@@ -112,6 +113,8 @@ class GameState {
 			this._actionSound.play();
 
 			let guardianQuestion = currentGuardian.getQuestion(this._viableOptions);
+
+			this._questionPoints = guardianQuestion.points;
 			this._startTalking(guardianQuestion.question, guardianQuestion.answers);
 
 			return;
@@ -228,7 +231,7 @@ class GameState {
 				this._isTalking = false;
 				this._actionSound.play();
 
-				let guardianIndex = this._viableOptions[this._selectedOption];
+				let guardianIndex = this._questionPoints[this._selectedOption];
 				if (guardianIndex < 4) {
 					this._guardians[guardianIndex].score++;
 
