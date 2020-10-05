@@ -5,8 +5,8 @@ body {
 	font-family: sans-serif;
 	line-height: 1.6;
 
-	margin: 1em auto;
-	padding: 1em;
+	margin: 0;
+	padding: 0;
 	width: 768px;
 }
 
@@ -22,5 +22,5 @@ a {
 	border: 1px solid white;
 
 	display: block;
-	margin: 1em auto;
+	margin: 0;
 }
