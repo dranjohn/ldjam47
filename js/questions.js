@@ -283,10 +283,30 @@ const GUARDIAN_QUESTIONS = [
 
 		endQuestions: [
 			{
-				question: "I've won",
-				answers: [],
-				points: []
-			}
+				question: "Would you like me to show you a world that lasts forever?",
+				answers: ["Yes. Show me."],
+				points: [-1]
+			},
+      {
+        question: "Here we are. Here, nothing falls apart.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Everything is eternal here, and you too are eternity itself.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Are you content? You've finally escaped the cycle. No more pain. No more attachments. No more decay.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Here, we will only exist -- forever.",
+        answers: [],
+        points: []
+      }
 		],
 		indifferenceQuestion: {
 			question: "Do you even care about your life?",
