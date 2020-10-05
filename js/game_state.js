@@ -58,7 +58,12 @@ class GameState {
 		this._selectSound = new AudioWrapper("sound/select.wav", 0.1, 1, false);
 		this._actionSound = new AudioWrapper("sound/action.wav", 0.1, 1, false);
 		this._turningSound = new AudioWrapper("sound/turning.ogg", 0.25, 1.6, false);
-		this._typeoutSound = new AudioWrapper("sound/typeout.ogg", 0.25, 1, true);
+		this._typeoutSounds = [
+			new AudioWrapper("sound/typeout_spring.ogg", 0.25, 1, true),
+			new AudioWrapper("sound/typeout_summer.ogg", 0.25, 1, true),
+			new AudioWrapper("sound/typeout_autumn.ogg", 0.25, 1, true),
+			new AudioWrapper("sound/typeout_winter.ogg", 0.25, 1, true)
+		];
 
 		// Load the world
 		this._isTurning = false;
@@ -112,7 +117,7 @@ class GameState {
 		this._selectedOption = 0;
 		this._isTyping = true;
 
-		this._typeoutSound.play();
+		this._typeoutSounds[this._worldRotation].play();
 	}
 
 
@@ -446,7 +451,7 @@ class GameState {
 		}
 
 		if (lettersLeft > 0) {
-			this._typeoutSound.stop();
+			this._typeoutSounds[this._worldRotation].stop();
 		}
 		if (lettersLeft >= typingSpeed) {
 			let lineNumber = 1;
