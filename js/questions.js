@@ -19,7 +19,7 @@ const GUARDIAN_QUESTIONS = [
 		questions: [
 			{
 				question: "Do you want to play with me?",
-				answers: ["Yes", "No"],
+				answers: ["Yes.", "No."],
 				points: [0, 4]
 			},
       {
@@ -72,15 +72,15 @@ const GUARDIAN_QUESTIONS = [
       }
 		],
 		indifferenceQuestion: {
-			question: "You're so boring. Do you even want to play with me?",
-			answers: ["No, I don't."],
+			question: "You're so boring. Why are you here? Do you even want to play this game?",
+			answers: ["No."],
 			points: [-1]
 		}
 	},
 
 	{
 		underworldQuestion: {
-			question: "Time only flows one way. And it's in everybody's 'interest' -- especially if you want to save up!",
+			question: "Time only flows one way. And it's in everybody's 'interest' -- especially if you want to save up! (Get it?)",
 			answers: [],
 			points: []
 		},
@@ -98,7 +98,7 @@ const GUARDIAN_QUESTIONS = [
 		questions: [
 			{
 				question: "We are hiring. Are you interested?",
-				answers: ["Yes", "No"],
+				answers: ["Yes.", "No."],
 				points: [1, 4]
 			},
       {
@@ -107,8 +107,8 @@ const GUARDIAN_QUESTIONS = [
 				points: [0, 1, 2, 3, 4]
       },
       {
-				question: "When did you realize you aren't a child anymore?",
-				answers: ["When I stopped being curious.", "When life started to become boring.", "Oh, I still feel like a child, just a bit older.", "When I turned 18 years old.", "I never thought about that."],
+				question: "When did you realize you're not a child anymore?",
+				answers: ["When I stopped being curious.", "When life started to become boring.", "Oh, I still feel like a child, just a bit older.", "When I first had to pay taxes.", "I never thought about that."],
 				points: [3, 0, 2, 1, 4]
       },
       {
@@ -125,7 +125,7 @@ const GUARDIAN_QUESTIONS = [
 
 		endQuestions: [
 			{
-				question: "You seem to be a competent partner. Are you interested in starting a company together?",
+				question: "You seem to be a competent partner. Are you interested in doing business together?",
 				answers: ["Yes, that sounds reasonable."],
 				points: [-1]
 			},
@@ -145,14 +145,14 @@ const GUARDIAN_QUESTIONS = [
         points: []
       },
       {
-        question: "Here we can enjoy the fruit of our labor forever!",
+        question: "Here we can enjoy the fruits of our labor forever!",
         answers: [],
         points: []
       }
 		],
 		indifferenceQuestion: {
 			question: "I don't think you have the ambition required for our project.",
-			answers: ["I never wanted to work with you anyway."],
+			answers: ["Okay."],
 			points: [-1]
 		}
 	},
@@ -177,12 +177,12 @@ const GUARDIAN_QUESTIONS = [
 		questions: [
 			{
 				question: "Would you like to chat for a while, darling?",
-				answers: ["Yes", "No"],
+				answers: ["Yes.", "No."],
 				points: [2, 4]
 			},
       {
 				question: "Can I offer you something to eat or drink?",
-				answers: ["Some milk and cookies, please!", "Let's cook something together.", "Thank you for the offer, but I'm in a hurry.", "No thanks, I'm on a diet.", "I'm not hungry."],
+				answers: ["Some milk and cookies, please!", "Let's cook something together.", "Thank you for the offer, but I'm in a hurry.", "I'm not hungry.", "No thanks, I'm on a diet."],
 				points: [0, 2, 1, 3, 4]
       },
       {
@@ -196,8 +196,8 @@ const GUARDIAN_QUESTIONS = [
 				points: [3, 2, 1, 0, 4]
       },
       {
-				question: "Do you like it around here?",
-				answers: ["It's fun to talk to the child.", "It's worthwhile to talk to the man.", "It's nice talking with you.", "It's calming to talk to the skeleton.", "Yes."],
+				question: "How do you like it around here?",
+				answers: ["It's fun to talk to the child.", "It's worthwhile to talk to the man.", "It's nice to chat with you.", "It's calming to talk to the skeleton.", "It's okay."],
 				points: [0, 1, 2, 3, 4]
       }
 		],
@@ -205,7 +205,7 @@ const GUARDIAN_QUESTIONS = [
 		endQuestions: [
 			{
 				question: "Would you like to look through a photo album with me, darling?",
-				answers: ["Yes, I'd love to, granny."],
+				answers: ["Yes, I'd love to."],
 				points: [-1]
 			},
       {
@@ -214,7 +214,7 @@ const GUARDIAN_QUESTIONS = [
         points: []
       },
       {
-        question: "Oh, a lot has changed, darling! The world you see here is now only preserved in my memories. It's beautiful to reminisce.",
+        question: "Oh, a lot has changed, darling! The world you see here is now only preserved in my memories. It's a wonderful thing to reminisce.",
         answers: [],
         points: []
       },
@@ -224,21 +224,21 @@ const GUARDIAN_QUESTIONS = [
         points: []
       },
       {
-        question: "Here we can enjoy the good old times forever!",
+        question: "Here we can enjoy the good old times forever.",
         answers: [],
         points: []
       }
 		],
 		indifferenceQuestion: {
-			question: "Oh, darling, you just aren't the same any more...",
-			answers: ["That's none of your business."],
+			question: "Oh, darling, you used to be so talkative when you were younger. You just aren't the same any more...",
+			answers: ["Whatever."],
 			points: [-1]
 		}
 	},
 
 	{
 		underworldQuestion: {
-			question: "You can't go back in time. If that were possible, I wouldn't have to be like this.",
+			question: "You can't go back in time.",
 			answers: [],
 			points: []
 		},
@@ -248,7 +248,7 @@ const GUARDIAN_QUESTIONS = [
 			points: []
 		},
 		exhaustedQuestion: {
-			question: "You don't want me to show you more. Believe me.",
+			question: "I have nothing more to show you -- for now.",
 			answers: [],
 			points: []
 		},
@@ -256,27 +256,27 @@ const GUARDIAN_QUESTIONS = [
 		questions: [
 			{
 				question: "Are you afraid of me?",
-				answers: ["No", "Yes"],
+				answers: ["No.", "Yes."],
 				points: [3, 4]
 			},
       {
 				question: "What do you think happens after death?",
-				answers: ["I know that the ones who love us will miss us.", "We will go to heaven.", "My life insurance finally pays off.", "As long as I live, it doesn't matter.", "I don't know."],
+				answers: ["I know that the ones who love us will miss us.", "We will all go to heaven.", "My life insurance finally pays off.", "As long as I live, it doesn't matter.", "I don't know."],
 				points: [2, 0, 1, 3, 4]
       },
       {
 				question: "Do you value having a peaceful life?",
-				answers: ["Yes, stability is important for me to thrive.", "No, I need adventures.", "Life itself is everything but peaceful.", "I regret not doing more while I still could.", "I don't care."],
+				answers: ["Yes, stability is important for me to thrive.", "No, I need adventures.", "Life itself is everything but peaceful.", "I do now, but I regret not doing more while I still could.", "I don't care."],
 				points: [1, 0, 3, 2, 4]
       },
       {
 				question: "What do you think of the night sky?",
-				answers: ["It's beautiful.", "It makes me feel small and unimportant.", "I like seeing so many constellations.", "You don't see much of it in the city.", "Looks okay."],
+				answers: ["It's beautiful to look at.", "It makes me feel small and unimportant.", "I like seeing so many constellations.", "You don't see much of it in the city.", "Looks okay."],
 				points: [2, 3, 0, 1, 4]
       },
       {
 				question: "Do you often go to the graveyard?",
-				answers: ["No, graveyards are scary.", "I only go there when I have to.", "Yes, many of my loved ones lie there.", "Yes, I feel at peace there.", "No."],
+				answers: ["No, graveyards are scary.", "I only go there when I have to.", "Yes, many of my loved ones lie there.", "Yes, it makes me feel at peace.", "No."],
 				points: [0, 1, 2, 3, 4]
       }
 		],
@@ -309,7 +309,7 @@ const GUARDIAN_QUESTIONS = [
       }
 		],
 		indifferenceQuestion: {
-			question: "Do you even care about your life?",
+			question: "Do you care about your life?",
 			answers: ["I don't even know."],
 			points: [-1]
 		}
