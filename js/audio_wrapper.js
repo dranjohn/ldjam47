@@ -8,9 +8,9 @@ class AudioWrapper extends Audio {
 		this.loop = loop;
 	}
 
-	myplay() {
+	play() {
 		this.currentTime = 0;
-		this.play();
+		super.play();
 	}
 
 	stop() {
