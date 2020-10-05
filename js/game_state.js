@@ -437,34 +437,35 @@ class GameState {
 			//this._selectSound.play();
 		}*/
 
-		let lettersLeft = Math.floor(this._talkingTimeElapsed * 20);
+		const typingSpeed = 20;
+		let lettersLeft = Math.floor(this._talkingTimeElapsed * typingSpeed);
 
-		for (let i = 0; i < this._talkingMessage.length; i++) {
+		for (let i = 0; i < this._talkingMessage.length && lettersLeft > 0; i++) {
 			this._ctx.fillText(this._talkingMessage[i].substring(0, lettersLeft), 10, (i+1)*10); // 1, i+1);
 			lettersLeft -= this._talkingMessage[i].length;
 		}
 
 		if (lettersLeft > 0) {
+			this._typeoutSound.stop();
+		}
+		if (lettersLeft >= typingSpeed) {
 			let lineNumber = 1;
 
 			for (let i = 0; i < this._talkingOptions.length; i++) {
-				if (i !== this._selectedOption) {
+				if (i === this._selectedOption) {
+					this._ctx.fillStyle = "white";
+				} else {
 					this._ctx.fillStyle = "gray";
 				}
+
 				for (let line of this._talkingOptions[i]) {
-					this._ctx.fillText(line.substring(0, lettersLeft), 330, lineNumber*10); // 33, lineNumber);
-					lettersLeft -= line.length;
+					this._ctx.fillText(line, 330, lineNumber*10); // 33, lineNumber);
 					lineNumber++;
 				}
-				this._ctx.fillStyle = "white";
-				lineNumber++;
+				lineNumber++; // empty line after each option
 			}
 
-			this._isTyping = (lettersLeft < 0);
-
-			if (!this._isTyping) {
-				this._typeoutSound.stop();
-			}
+			this._isTyping = false;
 		}
 
 		this._ctx.restore();
