@@ -29,7 +29,7 @@ const GUARDIAN_QUESTIONS = [
       },
       {
 				question: "The skeleton over there looks so spooky! What scares you the most?",
-				answers: ["Yes, definitely skeletons. And chess.", "Forgetting something important.", "Being late to work.", "Death. The destruction of life.", "I'm not scared of anything."],
+				answers: ["Yes, definitely skeletons. And monsters.", "Forgetting something important.", "Being late to work.", "Death. The destruction of life.", "I'm not scared of anything."],
 				points: [0, 2, 1, 3, 4]
       },
       {
@@ -46,10 +46,30 @@ const GUARDIAN_QUESTIONS = [
 
 		endQuestions: [
 			{
-				question: "I've won",
-				answers: [],
-				points: []
-			}
+				question: "Would you like to play with me some more?",
+				answers: ["Yes."],
+				points: [-1]
+			},
+      {
+        question: "Here we are. This is my favorite playground.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "You can smell the flowers and we can play with my toys together!",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Are you happy? We've finally escaped the cycle of going to work and getting old and dying.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "We can have fun here forever!",
+        answers: [],
+        points: []
+      }
 		],
 		indifferenceQuestion: {
 			question: "You're so boring. Do you even want to play with me?",
