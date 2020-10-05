@@ -204,10 +204,30 @@ const GUARDIAN_QUESTIONS = [
 
 		endQuestions: [
 			{
-				question: "I've won",
-				answers: [],
-				points: []
-			}
+				question: "Would you like to look through a photo album with me, darling?",
+				answers: ["Yes, I'd love to, granny."],
+				points: [-1]
+			},
+      {
+        question: "Here we are. This is the world I grew up in.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Oh, a lot has changed, darling! The world you see here is now only preserved in my memories. It's beautiful to reminisce.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Are you happy? We've finally escaped the cycle of forgetfulness and greed and loss.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Here we can enjoy the good old times forever!",
+        answers: [],
+        points: []
+      }
 		],
 		indifferenceQuestion: {
 			question: "Oh, darling, you just aren't the same any more...",
