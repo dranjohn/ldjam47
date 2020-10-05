@@ -59,10 +59,10 @@ class GameState {
 		this._actionSound = new AudioWrapper("sound/action.ogg", 0.5, 1, false);
 		this._turningSound = new AudioWrapper("sound/turning.ogg", 0.25, 1.6, false);
 		this._typeoutSounds = [
-			new AudioWrapper("sound/spring3.ogg", 0.5, 1, true),
-			new AudioWrapper("sound/summer2.ogg", 0.5, 1, true),
-			new AudioWrapper("sound/autumn4.ogg", 0.5, 1, true),
-			new AudioWrapper("sound/winter2.ogg", 0.5, 1, true)
+			new AudioWrapper("sound/spring.ogg", 0.5, 1, true),
+			new AudioWrapper("sound/summer.ogg", 0.5, 1, true),
+			new AudioWrapper("sound/autumn.ogg", 0.5, 1, true),
+			new AudioWrapper("sound/winter.ogg", 0.5, 1, true)
 		];
 
 		// Load the world
