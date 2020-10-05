@@ -125,10 +125,30 @@ const GUARDIAN_QUESTIONS = [
 
 		endQuestions: [
 			{
-				question: "I've won",
-				answers: [],
-				points: []
-			}
+				question: "You seem to be a competent partner. Are you interested in starting a company together?",
+				answers: ["Yes, that sounds reasonable."],
+				points: [-1]
+			},
+      {
+        question: "Here we are. This is the kind of world that hard work gives you.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "We've built this place. It's us who made it great. A complete success.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Are you happy? We've finally escaped the cycle of laziness and frailty and destruction.",
+        answers: [],
+        points: []
+      },
+      {
+        question: "Here we can enjoy the fruit of our labor forever!",
+        answers: [],
+        points: []
+      }
 		],
 		indifferenceQuestion: {
 			question: "I don't think you have the ambition required for our project.",
