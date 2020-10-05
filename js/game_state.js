@@ -56,7 +56,7 @@ class GameState {
 		this._selectedOption = 0;
 
 		this._selectSound = new AudioWrapper("sound/select.ogg", 0.25, 1.8, false);
-		this._actionSound = new AudioWrapper("sound/action.wav", 0.1, 1, false);
+		this._actionSound = new AudioWrapper("sound/action.ogg", 0.5, 1, false);
 		this._turningSound = new AudioWrapper("sound/turning.ogg", 0.25, 1.6, false);
 		this._typeoutSounds = [
 			new AudioWrapper("sound/typeout_spring.ogg", 0.25, 1, true),
