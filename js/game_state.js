@@ -453,7 +453,7 @@ class GameState {
 		if (lettersLeft > 0) {
 			this._typeoutSounds[this._worldRotation].stop();
 		}
-		if (lettersLeft >= 0.5*typingSpeed) {
+		if (lettersLeft > 0.2*typingSpeed) {
 			let lineNumber = 1;
 
 			for (let i = 0; i < this._talkingOptions.length; i++) {
