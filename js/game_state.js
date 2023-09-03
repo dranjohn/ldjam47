@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const FIRST_REMOVAL_SCORE = 2;
 const SECOND_REMOVAL_SCORE = 4;

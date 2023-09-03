@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 class Guardian {
 	constructor(leftSprite, rightSprite, questionSet) {
