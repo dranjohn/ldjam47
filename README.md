@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2020, 2023 dranjohn
+SPDX-FileCopyrightText: 2020, 2023 Daniel Kalak
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 Nirvana
 =======
 
