@@ -4,22 +4,49 @@ SPDX-FileCopyrightText: 2020, 2023 Daniel Kalak
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-Nirvana
-=======
+Nirvana - a JavaScript game for Ludum Dare 47
+=============================================
 
-This is our game for the [Ludum Dare 47][1] Jam in October 2020.
-It is the first time we participate.
+This is the game "Nirvana".
+It was our submission to the Jam category of [Ludum Dare 47][1] in 2020-10.
+It was the first time for both of us to participate in a game jam.
 
-You can play the game on [itch.io][2].
-Use the arrow keys to navigate and the X key to perform an action.
+How to play the game
+--------------------
+
+You can run the game in two ways:
+you can play it online on [itch.io][2], or you can play it locally.
+To play the game locally, first download all files and directories.
+Then open the "index.html" file in your browser.
+
+Use the arrow keys to walk around and to select a dialog option.
+Use the X key to talk to an NPC and to confirm a dialog option.
 
 There are five different endings.
-You have reached an ending when you cannot do anything any more.
+You have reached an ending when you can no longer talk to any NPC.
 You can then reload the page and play again.
+(If you feel stuck, try only walking to the right.)
 
-The game is licensed under the MIT (Expat) License.
-You can view the [source code here][3].
+Licenses
+--------
+
+The game had initially been licensed under the MIT License.
+This is no longer the case:
+we have decided to relicense it under GPL-3.0-or-later.
+Supporting artwork and this README document are licensed under CC-BY-SA-4.0.
+
+The game complies with the [REUSE][3] specification:
+you can find all used licenses in the "LICENSES" directory.
+
+You can browse the source code on [GitHub][4].
+
+The authors
+-----------
+
+The game was written by dranjohn and Daniel Kalak.
+Daniel Kalak went by the pseudonym "nidrig" during the initial release.
 
 [1]: https://ldjam.com/events/ludum-dare/47
 [2]: https://dranjohn.itch.io/nirvana
-[3]: https://github.com/dranjohn/ldjam47
+[3]: https://reuse.software/
+[4]: https://github.com/dranjohn/ldjam47
